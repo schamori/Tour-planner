@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Bl;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,13 @@ namespace TourPlanner.Views
         public AddTour()
         {
             InitializeComponent();
+        }
+
+        private async void OnCreateRouteButtonClick(object sender, RoutedEventArgs e)
+        {
+            var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
+            var route = await routeService.CreateRouteAsync(FromTextBox.Text, ToTextBox.Text);
+            // Aktualisiere die GUI mit den erhaltenen Routendaten und dem Bild
         }
     }
 }
