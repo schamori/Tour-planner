@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Bl;
 using DAL;
@@ -79,10 +80,27 @@ namespace TourPlanner.ViewModels
 
         public ICommand AddTourCommand { get; set; }
 
+        public TourRepo _dbManager;
 
 
-        public MainWindowViewModel(DatabaseManager _dbManager, ViewModelBase addTourViewModel)
+        public class Tour
         {
+            public string Name { get; set; }
+        }
+
+        public ObservableCollection<Tour> Tours { get; set; }
+
+            public MainWindowViewModel(DatabaseManager _dbManager, ViewModelBase addTourViewModel)
+        {
+
+
+            Tours = new ObservableCollection<Tour>
+            {
+                new Tour { Name = "Wienerwald" },
+                new Tour { Name = "Dopplerhütte" },
+                new Tour { Name = "FiglWarte" },
+                new Tour { Name = "Dorfrunde" }
+            };
 
             _dbManager.GetAllTours();
 
@@ -105,7 +123,16 @@ namespace TourPlanner.ViewModels
                 ToursVisibility = Visibility.Visible;
                 AddTourVisibility = Visibility.Hidden;
 
+                OnCreateRouteButtonClick();
             });
+        }
+
+        private async void OnCreateRouteButtonClick()
+        {
+            var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
+            var route = await routeService.CreateRouteAsync(From, To);
+            // Aktualisiere die GUI mit den erhaltenen Routendaten und dem Bild
+            _dbManager.Add(route);
         }
 
         public string Name

@@ -30,7 +30,7 @@ namespace DAL
         {
             var requestBody = new JObject(new JProperty("coordinates", new JArray(new JArray(startLng, startLat), new JArray(endLng, endLat))));
             var content = new StringContent(requestBody.ToString(), Encoding.UTF8, "application/json");
-            var response = await _client.PostAsync($"https://api.openrouteservice.org/v2/directions/driving-car/geojson?api_key={_apiKey}", content);
+            var response = await _client.PostAsync($"https://api.openrouteservice.org/v2/directions/driving-car/geojson?api_key=5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0", content);
             response.EnsureSuccessStatusCode();
             var responseString = await response.Content.ReadAsStringAsync();
             return JObject.Parse(responseString);

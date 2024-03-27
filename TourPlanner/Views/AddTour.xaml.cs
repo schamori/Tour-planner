@@ -24,13 +24,8 @@ namespace TourPlanner.Views
         public AddTour()
         {
             InitializeComponent();
-
         }
 
-        private async void OnCreateRouteButtonClick(object sender, RoutedEventArgs e)
-        {
-            var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
-            // Aktualisiere die GUI mit den erhaltenen Routendaten und dem Bild
-        }
+        
     }
 }

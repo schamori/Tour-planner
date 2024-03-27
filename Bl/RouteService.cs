@@ -17,7 +17,7 @@ namespace Bl
             _orsClient = new OpenRouteServiceClient(apiKey);
         }
 
-        public async Task<Route> CreateRouteAsync(string startAddress, string endAddress)
+        public async Task<Route> CreateRouteAsync(string name, string description, string startAddress, string endAddress, string transportType)
         {
             var startCoords = await _orsClient.GeocodeAddress(startAddress);
             var endCoords = await _orsClient.GeocodeAddress(endAddress);
@@ -30,14 +30,31 @@ namespace Bl
             var route = await _orsClient.GetRoute(startLat, startLng, endLat, endLng);
 
             // Logik, um das Bild der Route zu bekommen, würde hier folgen
-            // ...
+            var startTile = GetTileUrl(startLat, startLng, 10);
+            var endTile = GetTileUrl(endLat, endLng, 10);
 
+            var newRoute = new Route(name, description, startAddress, endAddress, route);
+            return newRoute;
             // Erstelle eine Route-Instanz und fülle sie mit den Daten
-            return new Route
-            {
-                // ... Setze Eigenschaften der Route mit den erhaltenen Daten
-            };
         }
+
+        public static (int x, int y) LatLongToTileXY(double latitude, double longitude, int zoom)
+        {
+            double latRad = latitude * Math.PI / 180;
+            double n = Math.Pow(2, zoom);
+            int x = (int)((longitude + 180.0) / 360.0 * n);
+            int y = (int)((1.0 - Math.Log(Math.Tan(latRad) + 1.0 / Math.Cos(latRad)) / Math.PI) / 2.0 * n);
+
+            return (x, y);
+        }
+
+        public static string GetTileUrl(double latitude, double longitude, int zoom)
+        {
+            var tileXY = LatLongToTileXY(latitude, longitude, zoom);
+            return $"https://tile.openstreetmap.org/{zoom}/{tileXY.x}/{tileXY.y}.png";
+        }
+
+        
     }
 
 }
