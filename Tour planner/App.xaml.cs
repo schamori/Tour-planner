@@ -10,7 +10,7 @@ namespace Tour_planner
 {
     /// <summary>
     /// Interaction logic for App.xaml
-    /// </summary>
+    /// </summaryy>
     public partial class App : Application
     {
     }
