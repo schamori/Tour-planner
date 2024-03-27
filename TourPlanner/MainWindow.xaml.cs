@@ -26,5 +26,7 @@ namespace TourPlanner
             InitializeComponent();
             this.DataContext = new MainWindowViewModel();
         }
+
+
     }
 }
