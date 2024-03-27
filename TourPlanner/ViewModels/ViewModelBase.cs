@@ -9,11 +9,9 @@ namespace TourPlanner.ViewModels
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected void RaisePropertyChangedEvent([CallerMemberName] string propertyName = "")
+        protected virtual void OnPropertyChanged(string propertyName)
         {
-            ValidatePropertyName(propertyName);
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
         protected void ValidatePropertyName(string propertyName)
