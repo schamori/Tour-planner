@@ -12,18 +12,22 @@ namespace TourPlanner.ViewModels
     {
         public ICommand AddCommand { get; set; }
 
-        public ICommand ClearCommand { get; set; }
+        public ICommand DeleteCommand { get; set; }
 
-        public ICommand RandGenItemCommand { get; set; }
+        public ICommand ModifyCommand { get; set; }
 
-        public ICommand RandGenLogCommand { get; set; }
 
 
         public MainWindowViewModel()
         {
             AddCommand = new RelayCommand(o =>
             {
-                Console.WriteLine("Pressed");
+            });
+            DeleteCommand = new RelayCommand(o =>
+            {
+            });
+            ModifyCommand = new RelayCommand(o =>
+            {
             });
         }
     }
