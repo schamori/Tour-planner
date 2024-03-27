@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TourPlanner
+namespace TourPlanner.Views
 {
     /// <summary>
-    /// Interaction logic for AddTour.xaml
+    /// Interaction logic for Map.xaml
     /// </summary>
-    public partial class AddTour : Page
+    public partial class Map : UserControl
     {
-        public AddTour()
+        public Map()
         {
             InitializeComponent();
         }

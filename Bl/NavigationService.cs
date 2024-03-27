@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.IO;
 
 namespace Bl
 {
@@ -14,6 +15,8 @@ namespace Bl
         public MyNavigationService(Frame frame)
         {
             _frame = frame;
+            _frame.Navigate(new Uri("pack://application:,,,/TourPlanner;component/HomePage.xaml", UriKind.Absolute));
+
         }
         public void NavigateTo(string pageKey)
         {
@@ -23,7 +26,7 @@ namespace Bl
                     _frame.Navigate(new Uri("TourPlanner/HomePage.xaml", UriKind.Relative));
                     break;
                 case "AddTour":
-                    _frame.Navigate(new Uri("TourPlanner\AddTour.xaml", UriKind.Relative));
+                    _frame.Navigate(new Uri("pack://application:,,,/TourPlanner;component/AddTour.xaml", UriKind.Absolute));
                     break;
                 default:
                     throw new ArgumentException("Unknown page key", nameof(pageKey));

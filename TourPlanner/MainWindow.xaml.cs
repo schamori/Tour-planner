@@ -25,8 +25,7 @@ namespace TourPlanner
         public MainWindow()
         {
             InitializeComponent();
-            var navigationService = new MyNavigationService(MainFrame);
-            this.DataContext = new MainWindowViewModel(navigationService);
+            this.DataContext = new MainWindowViewModel();
         }
 
 
