@@ -14,20 +14,29 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TourPlanner.ViewModels;
 using Bl;
+using DAL;
 
 namespace TourPlanner
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+    /// 
+    
     public partial class MainWindow : Window
     {
+        private DatabaseManager _dbManager;
         public MainWindow()
         {
             InitializeComponent();
             this.DataContext = new MainWindowViewModel();
+            _dbManager = new DatabaseManager("Host=localhost;Port=5432;Database=postgresdb;Username=mpleyer;Password=admin;");
+            LoadTours();
         }
 
-
+        private void LoadTours()
+        {
+            _dbManager.GetAllTours();
+        }
     }
 }
