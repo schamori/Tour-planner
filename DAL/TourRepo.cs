@@ -47,6 +47,34 @@ namespace DAL
             }
         }
 
+        public List<Route> GetAllTours()
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            using var cmd = new NpgsqlCommand("SELECT * FROM tours", connection);
+            List<Route> tours = new();
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    tours.Add(new Route(
+                        reader.GetGuid(reader.GetOrdinal("t_id")),
+                        reader.GetString(reader.GetOrdinal("t_name")),
+                        reader.GetString(reader.GetOrdinal("t_description")),
+                        reader.GetString(reader.GetOrdinal("t_from")),
+                        reader.GetString(reader.GetOrdinal("t_to")),
+                        reader.GetString(reader.GetOrdinal("t_transport")),
+                        reader.GetDouble(reader.GetOrdinal("t_distance")),
+                        reader.GetInt32(reader.GetOrdinal("t_estimatedTime")),
+                        reader.GetDateTime(reader.GetOrdinal("t_creationTime"))
+                        ));
+                }
+                return tours;
+            }
+        }
+
         private void EnsureTables()
         {
             // TODO: handle exceptions

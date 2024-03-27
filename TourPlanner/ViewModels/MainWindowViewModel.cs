@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -90,19 +91,17 @@ namespace TourPlanner.ViewModels
 
         public ObservableCollection<Tour> Tours { get; set; }
 
+        public void LoadAllTours()
+        {
+            var _tourManager = new TourRepo("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin");
+            List<Route> allTours = _tourManager.GetAllTours();
+            Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name }));
+        }
+
             public MainWindowViewModel(DatabaseManager _dbManager, ViewModelBase addTourViewModel)
         {
+            LoadAllTours();
 
-
-            Tours = new ObservableCollection<Tour>
-            {
-                new Tour { Name = "Wienerwald" },
-                new Tour { Name = "Dopplerhütte" },
-                new Tour { Name = "FiglWarte" },
-                new Tour { Name = "Dorfrunde" }
-            };
-
-            _dbManager.GetAllTours();
 
             GotToAddCommand = new RelayCommand(o =>
             {
@@ -134,6 +133,7 @@ namespace TourPlanner.ViewModels
             Route route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);
             // Aktualisiere die GUI mit den erhaltenen Routendaten und dem Bild
             _tourManager.Add(route);
+            LoadAllTours();
         }
 
         public string Name
