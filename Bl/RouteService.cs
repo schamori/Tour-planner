@@ -33,7 +33,7 @@ namespace Bl
             var startTile = GetTileUrl(startLat, startLng, 10);
             var endTile = GetTileUrl(endLat, endLng, 10);
 
-            var newRoute = new Route(name, description, startAddress, endAddress, route);
+            var newRoute = new Route(name, description, startAddress, endAddress, route, transportType, 50.0, 5, DateTime.Now);
             return newRoute;
             // Erstelle eine Route-Instanz und fülle sie mit den Daten
         }
