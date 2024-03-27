@@ -10,7 +10,7 @@ namespace DAL
 {
     public class TourRepo
     {
-        private const string CreateTourTableCommand = @"CREATE TABLE IF NOT EXISTS tours (t_id UUID PRIMARY KEY, t_name varchar, t_creationTime timestamp, t_from varchar, t_to varchar, t_distance float, t_estimatedTime int, t_transport varchar, t_picture);";
+        private const string CreateTourTableCommand = @"CREATE TABLE IF NOT EXISTS tours (t_id UUID PRIMARY KEY, t_name varchar, t_description varchar, t_creationTime timestamp, t_from varchar, t_to varchar, t_distance float, t_estimatedTime int, t_transport varchar);";
         private readonly string _connectionString;
 
         public TourRepo(string connectionString)
@@ -23,9 +23,9 @@ namespace DAL
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
 
-            using var cmd = new NpgsqlCommand("INSERT INTO tours (t_id, t_name, t_description, t_distance, t_creationTime, t_picture, t_estimatedTime, t_from, t_to, t_transport) VALUES ((@t_id), (@t_name), (@t_description), (@t_distance), (@t_creationTime), (@t_picture) ,(@t_estimatedTime), (@t_from), (@t_to), (@t_transport))", connection);
+            using var cmd = new NpgsqlCommand("INSERT INTO tours (t_id, t_name, t_description, t_distance, t_creationTime, t_estimatedTime, t_from, t_to, t_transport) VALUES ((@t_id), (@t_name), (@t_description), (@t_distance), (@t_creationTime) ,(@t_estimatedTime), (@t_from), (@t_to), (@t_transport))", connection);
 
-            cmd.Parameters.AddWithValue("t_id", obj.Id.ToString());
+            cmd.Parameters.AddWithValue("t_id", obj.Id);
             cmd.Parameters.AddWithValue("t_name", obj.Name);
             cmd.Parameters.AddWithValue("t_description", obj.Description);
             cmd.Parameters.AddWithValue("t_distance", obj.Distance);

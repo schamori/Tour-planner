@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using DAL;
 using Models;
+using Newtonsoft.Json.Linq;
 
 namespace Bl
 {
@@ -27,13 +28,26 @@ namespace Bl
             var endLat = (double)endCoords["features"][0]["geometry"]["coordinates"][1];
             var endLng = (double)endCoords["features"][0]["geometry"]["coordinates"][0];
 
-            var route = await _orsClient.GetRoute(startLat, startLng, endLat, endLng);
+            JObject route = await _orsClient.GetRoute(startLat, startLng, endLat, endLng);
+
+            // Zugriff auf das erste Feature-Objekt
+            var feature = route["features"][0];
+
+            // Zugriff auf die Properties
+            var properties = feature["properties"];
+
+            // Zugriff auf Summary
+            var summary = properties["summary"];
+
+            // Extrahiere Distance und Duration
+            var distance = (double)summary["distance"];
+            var duration = (int)summary["duration"];
 
             // Logik, um das Bild der Route zu bekommen, würde hier folgen
             var startTile = GetTileUrl(startLat, startLng, 10);
             var endTile = GetTileUrl(endLat, endLng, 10);
 
-            var newRoute = new Route(name, description, startAddress, endAddress, route, transportType, 50.0, 5, DateTime.Now);
+            Route newRoute = new Route(name, description, startAddress, endAddress, route, transportType, distance, duration, DateTime.Now);
             return newRoute;
             // Erstelle eine Route-Instanz und fülle sie mit den Daten
         }
