@@ -28,15 +28,11 @@ namespace TourPlanner
         private DatabaseManager _dbManager;
         public MainWindow()
         {
-            InitializeComponent();
-            this.DataContext = new MainWindowViewModel();
             _dbManager = new DatabaseManager("Host=localhost;Port=5432;Database=postgresdb;Username=mpleyer;Password=admin;");
-            LoadTours();
+
+            InitializeComponent();
+            this.DataContext = new MainWindowViewModel(_dbManager, new AddTourViewModel());
         }
 
-        private void LoadTours()
-        {
-            _dbManager.GetAllTours();
-        }
     }
 }

@@ -1,23 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Input;
+
 
 namespace TourPlanner.ViewModels
 {
-    // Properties bound to your input fields
-    public string TourName { get; set; }
-    public string TourDescription { get; set; }
-    // Other properties...
-
-    public AddTourViewModel()
+    public class AddTourViewModel : ViewModelBase
     {
-        SaveTourCommand = new RelayCommand(SaveTour);
-    }
+        public string TourName { get; set; }
+        public string TourDescription { get; set; }
 
-    private void SaveTour(object parameter)
-    {
-        // Logic to save the tour using the input data
+        public ICommand SaveTourCommand { get; private set; }
+
+        public AddTourViewModel()
+        {
+            SaveTourCommand = new RelayCommand(SaveTour);
+        }
+
+        private void SaveTour(object parameter)
+        {
+            // Logic to save the tour using the input data
+        }
     }
 }

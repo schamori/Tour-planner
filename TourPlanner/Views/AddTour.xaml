@@ -10,26 +10,25 @@
         <StackPanel Margin="10">
 
             <TextBlock Text="Name" Margin="5"/>
-            <TextBox x:Name="NameTextBox" Margin="5"/>
+            <TextBox Text="{Binding Name}" Margin="5"/>
 
             <TextBlock Text="Tour Description" Margin="5"/>
-            <TextBox x:Name="DescriptionTextBox" Margin="5" AcceptsReturn="True" Height="100"/>
+            <TextBox Text="{Binding Description}" Height="100"/>
 
             <TextBlock Text="From" Margin="5"/>
-            <TextBox x:Name="FromTextBox" Margin="5"/>
+            <TextBox Text="{Binding From}" Margin="5"/>
 
             <TextBlock Text="To" Margin="5"/>
-            <TextBox x:Name="ToTextBox" Margin="5"/>
+            <TextBox Text="{Binding To}" Margin="5"/>
 
             <TextBlock Text="Transport Type" Margin="5"/>
-            <ComboBox x:Name="TransportTypeComboBox" Margin="5">
-                <!-- Populate ComboBox with transport type options -->
+            <ComboBox Text="{Binding TransportType}" Margin="5">
                 <ComboBoxItem>Car</ComboBoxItem>
                 <ComboBoxItem>Bike</ComboBoxItem>
                 <ComboBoxItem>Public Transport</ComboBoxItem>
                 <ComboBoxItem>Walking</ComboBoxItem>
             </ComboBox>
-            <Button Content="Submit" Command="{Binding FinishCreateTour}" Margin="5"/>
+            <Button Content="Submit" Command="{Binding AddTourCommand}" Margin="5"/>
 
         </StackPanel>
     </ScrollViewer>
