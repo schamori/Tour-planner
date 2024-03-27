@@ -8,7 +8,7 @@
         xmlns:local="clr-namespace:TourPlanner.Views"
 
         mc:Ignorable="d"
-        Title="Tour Planner" Height="450" Width="800">
+        Title="Tour Planner" Height="800" Width="800">
     <Grid>
         <!-- Menu Bar -->
         <local:Navbar x:Name="Navbar" />
@@ -26,7 +26,7 @@
             <!-- Sidebar for Navigation -->
             <local:Tours Visibility="{Binding ToursVisibility}" x:Name="Tours" Grid.ColumnSpan="2" Margin="14,49,5,-49"/>
 
-            <local:AddTours Visibility="{Binding ToursVisibility}" x:Name="AddTours" Grid.ColumnSpan="2" Margin="14,49,5,-49"/>
+            <local:AddTour Visibility="{Binding AddTourVisibility}" x:Name="AddTour" Grid.ColumnSpan="2" Margin="14,49,5,-49"/>
 
 
             <!-- Map Display Area -->
