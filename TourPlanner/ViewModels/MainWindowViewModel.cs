@@ -6,7 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Bl;
 using DAL;
-
+using Models;
 
 namespace TourPlanner.ViewModels
 {
@@ -129,10 +129,11 @@ namespace TourPlanner.ViewModels
 
         private async void OnCreateRouteButtonClick()
         {
+            var _tourManager = new TourRepo("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin");
             var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
-            var route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);
+            Route route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);
             // Aktualisiere die GUI mit den erhaltenen Routendaten und dem Bild
-            _dbManager.Add(route);
+            _tourManager.Add(route);
         }
 
         public string Name
