@@ -6,9 +6,10 @@
         xmlns:viewmodels="clr-namespace:TourPlanner.ViewModels" 
         d:DataContext="{d:DesignInstance Type=viewmodels:MainWindowViewModel}" 
         mc:Ignorable="d"
-
         Title="Tour Planner" Height="450" Width="800">
     <DockPanel>
+        <Frame x:Name="MainFrame" NavigationUIVisibility="Hidden"/>
+
         <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="File" />
@@ -38,7 +39,7 @@
                 </ListBox>
                 <!-- Tour Action Buttons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-                    <Button Command="{Binding AddCommand}"  Content="Add" Margin="5"/>
+                    <Button Command="{Binding GotToAddCommand}"  Content="Add" Margin="5"/>
                     <Button Content="Delete" Margin="5"/>
                     <Button Content="Modify" Margin="5"/>
                 </StackPanel>
