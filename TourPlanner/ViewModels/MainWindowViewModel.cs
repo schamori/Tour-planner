@@ -19,12 +19,11 @@ namespace TourPlanner.ViewModels
 
         private INavigationService _navigationService;
 
-        public MainWindowViewModel(INavigationService navigationService)
+        public MainWindowViewModel()
         {
-            _navigationService = navigationService;
             GotToAddCommand = new RelayCommand(o =>
             {
-                navigationService.NavigateTo("AddTour");
+                ;
             });
             AddCommand = new RelayCommand(o =>
             {
