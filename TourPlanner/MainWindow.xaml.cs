@@ -43,7 +43,7 @@ namespace TourPlanner
             ITourLogService tourLogService = new TourLogService(tourLogRepo);
             InitializeComponent();
             ToursView.TourSelected += ToursView_TourSelected;
-            this.DataContext = new MainWindowViewModel(tourService, _dbManager, new AddTourViewModel());
+            this.DataContext = new MainWindowViewModel(tourService, tourLogService, _dbManager, new AddTourViewModel());
 
             log.Info("Application is starting.");
         }

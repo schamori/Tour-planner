@@ -10,7 +10,7 @@
     <StackPanel Grid.Column="0" Margin="5,5,5,5" Grid.ColumnSpan="2">
         <!-- Tours Headline -->
         <TextBlock Text="Tours" FontWeight="Bold" FontSize="16" Margin="5"/>
-        <ListBox x:Name="ToursListBox" Margin="5" ItemsSource="{Binding Tours}">
+        <ListBox x:Name="ToursListBox" Margin="5" ItemsSource="{Binding Tours}" SelectionChanged="ListBox_SelectionChanged">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

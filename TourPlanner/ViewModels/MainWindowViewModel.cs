@@ -7,7 +7,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Bl;
 using DAL;
+using log4net;
 using Models;
+using TourPlanner.Views;
 
 namespace TourPlanner.ViewModels
 {
@@ -22,6 +24,7 @@ namespace TourPlanner.ViewModels
         public string _from;
         public string _to;
         public string _errorMessage = "";
+        public Guid _id;
 
         public string ErrorMessage
         {
@@ -142,12 +145,13 @@ namespace TourPlanner.ViewModels
         public void LoadAllTours()
         {
             List<Route> allTours = _tourService.GetAllTours();
-            Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name }));
+            Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name, Id = tour.Id }));
         }
 
-            public MainWindowViewModel(ITourService tourService, DatabaseManager _dbManager, ViewModelBase addTourViewModel)
+            public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService, DatabaseManager _dbManager, ViewModelBase addTourViewModel)
         {
             _tourService = tourService;
+            _tourLogService = tourLogService;
 
             LoadAllTours();
 
@@ -254,10 +258,13 @@ namespace TourPlanner.ViewModels
 
         }
 
+        private static readonly ILog log = LogManager.GetLogger(typeof(Tours));
         public void SelectedTourLog(Guid tourId)
         {
             List<TourLog> allTourLogs = _tourLogService.GetAllTourLogsForTour(tourId);
             SelectedTourLogs = new ObservableCollection<TourLog>(allTourLogs);
+            
+            log.Info("geladen" + allTourLogs.Count());
         }
 
         public string Name
@@ -269,6 +276,19 @@ namespace TourPlanner.ViewModels
                 {
                     _name = value;
                     OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+
+        public Guid Id
+        {
+            get => _id;
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    OnPropertyChanged(nameof(Id));
                 }
             }
         }

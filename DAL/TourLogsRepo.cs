@@ -55,14 +55,14 @@ namespace DAL
 
         }
 
-        public List<TourLog> GetAllTourLogsForTour(Guid logId)
+        public List<TourLog> GetAllTourLogsForTour(Guid tourId)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
 
             using var cmd = new NpgsqlCommand(GetTourLogsCommand, connection);
             List<TourLog> tours = new();
-            cmd.Parameters.AddWithValue("tlog_id", logId);
+            cmd.Parameters.AddWithValue("t_id", tourId);
             using (var reader = cmd.ExecuteReader())
             {
                 while (reader.Read())
