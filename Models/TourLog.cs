@@ -8,15 +8,38 @@ namespace Models
 {
     public class TourLog
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public DateTime Date { get; set; }
         public string Comment { get; set; }
-        public int Difficulty { get; set; }
+        public string Difficulty { get; set; }
         public double TotalDistance { get; set; }
         public int TotalTime { get; set; }
         public int Rating { get; set; }
         // Foreign Key für die Zuordnung zu einer Tour
-        public int TourId { get; set; }
+        public Guid TourId { get; set; }
+
+        public TourLog(string comment, string difficulty, double totoldistance, int totaltime, int rating, Guid tourId) {
+            Id = Guid.NewGuid();
+            Date = DateTime.Now;
+            Comment = comment;
+            Difficulty = difficulty;
+            TotalDistance = totoldistance;
+            TotalTime = totaltime;
+            Rating = rating;
+            TourId = tourId;
+        }
+
+        public TourLog(Guid id, DateTime date, string comment, string difficulty, double totoldistance, int totaltime, int rating, Guid tourId)
+        {
+            Id = id;
+            Date = date;
+            Comment = comment;
+            Difficulty = difficulty;
+            TotalDistance = totoldistance;
+            TotalTime = totaltime;
+            Rating = rating;
+            TourId = tourId;
+        }
     }
 
 }

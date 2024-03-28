@@ -13,9 +13,11 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using TourPlanner.ViewModels;
+using Models;
 using Bl;
 using DAL;
 using log4net;
+using TourPlanner.Views;
 
 namespace TourPlanner
 {
@@ -38,10 +40,19 @@ namespace TourPlanner
 
             ITourService tourService = new TourService(tourRepo);
             InitializeComponent();
+            ToursView.TourSelected += ToursView_TourSelected;
             this.DataContext = new MainWindowViewModel(tourService, _dbManager, new AddTourViewModel());
 
             log.Info("Application is starting.");
         }
 
+
+        private void ToursView_TourSelected(object sender, TourSelectedEventArgs e)
+        {
+            // Angenommen, TourSelectedEventArgs hat eine Property TourId für die ausgewählte Tour
+            var tourLogsView = (TourLogs)TourLogs; // cast, wenn nötig
+            var viewModel = (TourLogsViewModel)tourLogsView.DataContext;
+            viewModel.LoadLogsForTour(e.TourId);
+        }
     }
 }

@@ -21,7 +21,11 @@
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar für Navigation bleibt wie vorher -->
-            <local:Tours Visibility="{Binding ToursVisibility}" x:Name="Tours" Grid.Column="0" Margin="14,49,5,-49"/>
+            <local:Tours Visibility="{Binding ToursVisibility}"
+                         x:Name="ToursView"
+                         TourSelected="ToursView_TourSelected"
+                         Grid.Column="0"
+                         Margin="14,49,5,-49"/>
             <local:AddTour Visibility="{Binding AddTourVisibility}" x:Name="AddTour" Grid.Column="0" Margin="14,49,5,-49"/>
 
             <!-- Rechter Bereich für Map und Logs -->
