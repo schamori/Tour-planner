@@ -18,7 +18,9 @@ namespace Bl
         }
         public void AddTour(Route route)
         {
-            _tourRepo.Add(route);
+
+           _tourRepo.Add(route);
+
         }
 
         public void DeleteTour(string tourName)

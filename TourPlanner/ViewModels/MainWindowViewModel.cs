@@ -97,7 +97,7 @@ namespace TourPlanner.ViewModels
 
         public TourRepo _dbManager;
 
-
+        private string nameToModify = "";
         public class Tour
         {
             public string Name { get; set; }
@@ -162,9 +162,14 @@ namespace TourPlanner.ViewModels
             
             AddTourCommand = new RelayCommand(o =>
             {
+                if (nameToModify != "")
+                    _tourService.DeleteTour(nameToModify);
                 if (Name == "")
                 {
                     ErrorMessage = "Name not set";
+                } else if (_tourService.GetTour(Name) != null )
+                {
+                    ErrorMessage = "Name already taken";
                 }
                 else if (Description == "")
                 {
@@ -181,15 +186,22 @@ namespace TourPlanner.ViewModels
                 else if (TransportType == "")
                 {
                     ErrorMessage = "TransportType not set";
-                } else
+                } else 
                 {
-                    OnCreateRouteButtonClick();
+                     OnCreateRouteButtonClick();
+
                 }
-                Name = "";
-                Description = "";
-                From = "";
-                To = "";
-                TransportType = "";
+                if (ErrorMessage == "")
+                {
+                    Name = "";
+                    Description = "";
+                    From = "";
+                    To = "";
+                    TransportType = "";
+                    ToursVisibility = Visibility.Hidden;
+                    AddTourVisibility = Visibility.Visible;
+                }
+                
             });
         }
 
@@ -206,6 +218,7 @@ namespace TourPlanner.ViewModels
             Tour tour = parameter as Tour;
 
             Route route = _tourService.GetTour(tour!.Name)!;
+            nameToModify = route.Name;
             Name = route.Name;
             Description = route.Description;
             From = route.StartAddress;
@@ -218,11 +231,7 @@ namespace TourPlanner.ViewModels
         {
             var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
             Route route;
-            if(TransportType == "Car") { TransportType = "driving-car"; }
-            else if(TransportType == "Truck") { TransportType = "driving-truck"; }
-            else if (TransportType == "Cycling") { TransportType = "cycling-regular"; }
-            else if (TransportType == "Walking") { TransportType = "foot-walking"; }
-            else { TransportType = "wheelchair"; }
+           
             try
             {
                 route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);

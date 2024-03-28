@@ -23,11 +23,11 @@
 
             <TextBlock Text="Transport Type" Margin="5"/>
             <ComboBox Text="{Binding TransportType}" Margin="5">
-                <ComboBoxItem>Car</ComboBoxItem>
-                <ComboBoxItem>Truck</ComboBoxItem>
-                <ComboBoxItem>Cycling</ComboBoxItem>
-                <ComboBoxItem>Walking</ComboBoxItem>
-                <ComboBoxItem>Wheelchair</ComboBoxItem>
+                <ComboBoxItem>driving-car</ComboBoxItem>
+                <ComboBoxItem>driving-truck</ComboBoxItem>
+                <ComboBoxItem>cycling-regular</ComboBoxItem>
+                <ComboBoxItem>foot-walking</ComboBoxItem>
+                <ComboBoxItem>wheelchair</ComboBoxItem>
             </ComboBox>
 
             <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="5"/>

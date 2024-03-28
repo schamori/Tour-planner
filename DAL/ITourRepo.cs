@@ -13,7 +13,7 @@ namespace DAL
         void Add(Route obj);
         List<Route> GetAllTours();
         void DeleteTour(string tourName);
-        void UpdateTour();
+        void UpdateTour(Route obj);
 
 
     }
