@@ -21,7 +21,20 @@ namespace TourPlanner.ViewModels
         public string _transportType;
         public string _from;
         public string _to;
+        public string _errorMessage = "";
 
+        public string ErrorMessage
+        {
+            get => _errorMessage;
+            set
+            {
+                if (_errorMessage != value)
+                {
+                    _errorMessage = value;
+                    OnPropertyChanged(nameof(ErrorMessage));
+                }
+            }
+        }
         public string Description
         {
             get => _description;
@@ -91,17 +104,18 @@ namespace TourPlanner.ViewModels
 
         public ObservableCollection<Tour> Tours { get; set; }
 
+        private TourRepo _tourManager;
         public void LoadAllTours()
         {
-            var _tourManager = new TourRepo("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin");
             List<Route> allTours = _tourManager.GetAllTours();
             Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name }));
         }
 
-            public MainWindowViewModel(DatabaseManager _dbManager, ViewModelBase addTourViewModel)
+            public MainWindowViewModel(TourRepo tourManager, DatabaseManager _dbManager, ViewModelBase addTourViewModel)
         {
-            LoadAllTours();
+            _tourManager = tourManager;
 
+            LoadAllTours();
 
             GotToAddCommand = new RelayCommand(o =>
             {
@@ -119,21 +133,55 @@ namespace TourPlanner.ViewModels
             });
             AddTourCommand = new RelayCommand(o =>
             {
-                ToursVisibility = Visibility.Visible;
-                AddTourVisibility = Visibility.Hidden;
-
-                OnCreateRouteButtonClick();
+                if (Name == null)
+                {
+                    ErrorMessage = "Name not set";
+                }
+                else if (Description == null)
+                {
+                    ErrorMessage = "Description not set";
+                }
+                else if (From == null)
+                {
+                    ErrorMessage = "From location not set";
+                }
+                else if (To == null)
+                {
+                    ErrorMessage = "To location not set";
+                }
+                else if (TransportType == null)
+                {
+                    ErrorMessage = "TransportType not set";
+                } else
+                {
+                    OnCreateRouteButtonClick();
+                }
             });
         }
 
         private async void OnCreateRouteButtonClick()
         {
-            var _tourManager = new TourRepo("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin");
             var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
-            Route route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);
-            // Aktualisiere die GUI mit den erhaltenen Routendaten und dem Bild
+            Route route;
+            try
+            {
+                route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);
+            }
+            catch (System.ArgumentOutOfRangeException)
+            {
+                ErrorMessage = "Start or End Location not found";
+                return;
+            }
+            catch (System.Net.Http.HttpRequestException)
+            {
+                ErrorMessage = "Start or End Location not found";
+                return;
+
+            }
             _tourManager.Add(route);
             LoadAllTours();
+            ToursVisibility = Visibility.Visible;
+            AddTourVisibility = Visibility.Hidden;
         }
 
         public string Name

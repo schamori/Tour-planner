@@ -28,12 +28,14 @@ namespace TourPlanner
         private DatabaseManager _dbManager;
         public MainWindow()
         {
-            _dbManager = new DatabaseManager("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin;");
             var connectionString = "Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin";
+
+            _dbManager = new DatabaseManager(connectionString);
             TourRepo tourRepo = new TourRepo(connectionString);
 
+
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel(_dbManager, new AddTourViewModel());
+            this.DataContext = new MainWindowViewModel(tourRepo, _dbManager, new AddTourViewModel());
         }
 
     }
