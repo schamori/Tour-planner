@@ -102,7 +102,19 @@ namespace TourPlanner.ViewModels
             public string Name { get; set; }
         }
 
-        public ObservableCollection<Tour> Tours { get; set; }
+
+        private ObservableCollection<Tour> _tours;
+        public ObservableCollection<Tour> Tours {
+            get => _tours;
+            set
+            {
+                if (_tours != value)
+                {
+                    _tours = value;
+                    OnPropertyChanged(nameof(Tours));
+                }
+            }
+        }
 
         private TourRepo _tourManager;
         public void LoadAllTours()
@@ -179,9 +191,10 @@ namespace TourPlanner.ViewModels
 
             }
             _tourManager.Add(route);
-            LoadAllTours();
             ToursVisibility = Visibility.Visible;
             AddTourVisibility = Visibility.Hidden;
+            LoadAllTours();
+
         }
 
         public string Name
