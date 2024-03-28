@@ -1,4 +1,5 @@
-﻿using Models;
+﻿using Bl;
+using Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,6 +12,7 @@ namespace TourPlanner.ViewModels
     public class TourLogsViewModel : ViewModelBase
     {
         public ObservableCollection<TourLog> TourLogs { get; private set; }
+        private ITourLogService _tourLogService;
 
         public TourLogsViewModel()
         {
@@ -19,7 +21,7 @@ namespace TourPlanner.ViewModels
 
         public void LoadLogsForTour(Guid tourId)
         {
-            //ToDo
+            _tourLogService.GetAllTourLogsForTour(tourId);
         }
 
         public void AddLog(TourLog log)

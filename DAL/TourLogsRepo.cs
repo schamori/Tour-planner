@@ -8,12 +8,12 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    internal class TourLogsRepo
+    public class TourLogsRepo : ITourLogRepo
     {
         private const string CreateTourTableCommand = @"CREATE TABLE IF NOT EXISTS tourlogs (tlog_id UUID PRIMARY KEY, tlog_comment varchar, tlog_creationTime timestamp, tlog_difficulty varchar, tlog_totaltime int, tlog_distance float, tlog_rating int, t_id UUID);";
         private const string DeleteTourCommand = @"DELETE FROM tourlogs WHERE tlog_id = @tlog_id;";
         private const string AddCommand = @"INSERT INTO tourlogs (t_id, t_name, t_description, t_distance, t_creationTime, t_estimatedTime, t_from, t_to, t_transport) VALUES ((@t_id), (@t_name), (@t_description), (@t_distance), (@t_creationTime) ,(@t_estimatedTime), (@t_from), (@t_to), (@t_transport));";
-        private const string GetTourLogsCommand = @"SELECT * FROM tourlogs WHERE tlog_id = @tlog_id;";
+        private const string GetTourLogsCommand = @"SELECT * FROM tourlogs WHERE t_id = @t_id;";
 
         private readonly string _connectionString;
 
@@ -22,7 +22,7 @@ namespace DAL
             _connectionString = connectionString;
             EnsureTables();
         }
-        public void Add(Route obj)
+        public void AddTourLog(TourLog obj)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
@@ -30,19 +30,19 @@ namespace DAL
             using var cmd = new NpgsqlCommand(AddCommand, connection);
 
             cmd.Parameters.AddWithValue("tlog_id", obj.Id);
-            cmd.Parameters.AddWithValue("tlog_comment", obj.Name);
-            cmd.Parameters.AddWithValue("tlog_creationTime", obj.Description);
-            cmd.Parameters.AddWithValue("tlog_difficulty", obj.Distance);
-            cmd.Parameters.AddWithValue("tlog_totaltime", obj.CreationDate);
-            cmd.Parameters.AddWithValue("tlog_distance", obj.EstimatedTime);
-            cmd.Parameters.AddWithValue("tlog_rating", obj.StartAddress);
-            cmd.Parameters.AddWithValue("t_id", obj.EndAddress);
+            cmd.Parameters.AddWithValue("tlog_comment", obj.Comment);
+            cmd.Parameters.AddWithValue("tlog_creationTime", obj.Date);
+            cmd.Parameters.AddWithValue("tlog_difficulty", obj.Difficulty);
+            cmd.Parameters.AddWithValue("tlog_totaltime", obj.TotalTime);
+            cmd.Parameters.AddWithValue("tlog_distance", obj.TotalDistance);
+            cmd.Parameters.AddWithValue("tlog_rating", obj.Rating);
+            cmd.Parameters.AddWithValue("t_id", obj.TourId);
 
             cmd.Prepare();
             int res = cmd.ExecuteNonQuery();
         }
 
-        public void DeleteTour(Guid logId)
+        public void DeleteTourLog(Guid logId)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();

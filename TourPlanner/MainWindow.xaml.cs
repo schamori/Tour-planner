@@ -37,6 +37,7 @@ namespace TourPlanner
 
             _dbManager = new DatabaseManager(connectionString);
             ITourRepo tourRepo = new TourRepo(connectionString);
+            ITourLogRepo tourLogRepo = new TourLogsRepo(connectionString);
 
             ITourService tourService = new TourService(tourRepo);
             InitializeComponent();
