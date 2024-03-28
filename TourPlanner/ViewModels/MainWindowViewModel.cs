@@ -94,7 +94,6 @@ namespace TourPlanner.ViewModels
         public ICommand DeleteCommand { get; set; }
 
         public ICommand ModifyCommand { get; set; }
-        public ICommand ShowTourLogs { get; set; }
 
         public ICommand AddTourCommand { get; set; }
 

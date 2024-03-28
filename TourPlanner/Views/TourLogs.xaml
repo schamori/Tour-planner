@@ -10,9 +10,6 @@
         <!-- Tour Logs Header -->
         <TextBlock Text="Tour Logs" FontWeight="Bold" FontSize="16" Margin="3,5,5,5"/>
 
-        <!-- Add Log Button -->
-        <Button Content="Add Log" Command="{Binding AddLogCommand}" Margin="5" HorizontalAlignment="Right"/>
-
         <!-- Tour Logs Data Grid -->
         <DataGrid AutoGenerateColumns="False" CanUserAddRows="False" ItemsSource="{Binding SelectedTourLogs}">
             <DataGrid.Columns>
@@ -23,7 +20,12 @@
                 <DataGridTextColumn Header="Distance" Binding="{Binding TotalDistance}" Width="*" />
                 <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" />
             </DataGrid.Columns>
+
         </DataGrid>
 
+        <!-- Add Log Button Area -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3" Height="50">
+            <Button Content="Add Log" Command="{Binding AddLogCommand}" Margin="5" HorizontalAlignment="Right" Visibility="{Binding AddLogButtonVisibility}"/>
+        </StackPanel>
     </Grid>
 </UserControl>
