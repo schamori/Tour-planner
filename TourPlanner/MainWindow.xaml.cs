@@ -40,6 +40,7 @@ namespace TourPlanner
             ITourLogRepo tourLogRepo = new TourLogsRepo(connectionString);
 
             ITourService tourService = new TourService(tourRepo);
+            ITourLogService tourLogService = new TourLogService(tourLogRepo);
             InitializeComponent();
             ToursView.TourSelected += ToursView_TourSelected;
             this.DataContext = new MainWindowViewModel(tourService, _dbManager, new AddTourViewModel());
@@ -50,10 +51,8 @@ namespace TourPlanner
 
         private void ToursView_TourSelected(object sender, TourSelectedEventArgs e)
         {
-            // Angenommen, TourSelectedEventArgs hat eine Property TourId für die ausgewählte Tour
-            var tourLogsView = (TourLogs)TourLogs; // cast, wenn nötig
-            var viewModel = (TourLogsViewModel)tourLogsView.DataContext;
-            viewModel.LoadLogsForTour(e.TourId);
+            var viewModel = (MainWindowViewModel)DataContext;
+            viewModel.SelectedTourLog(e.TourId);
         }
     }
 }

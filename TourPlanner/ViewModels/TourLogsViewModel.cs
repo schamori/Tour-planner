@@ -21,7 +21,12 @@ namespace TourPlanner.ViewModels
 
         public void LoadLogsForTour(Guid tourId)
         {
-            _tourLogService.GetAllTourLogsForTour(tourId);
+            var logs = _tourLogService.GetAllTourLogsForTour(tourId);
+            TourLogs.Clear();
+            foreach (var log in logs)
+            {
+                TourLogs.Add(log);
+            }
         }
 
         public void AddLog(TourLog log)

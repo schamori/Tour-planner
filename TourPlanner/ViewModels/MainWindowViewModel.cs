@@ -91,6 +91,7 @@ namespace TourPlanner.ViewModels
         public ICommand DeleteCommand { get; set; }
 
         public ICommand ModifyCommand { get; set; }
+        public ICommand ShowTourLogs { get; set; }
 
         public ICommand AddTourCommand { get; set; }
 
@@ -100,6 +101,12 @@ namespace TourPlanner.ViewModels
         public class Tour
         {
             public string Name { get; set; }
+            public Guid Id { get; set; }
+        }
+
+        public class ToursLog
+        {
+            public Guid Id { get; set; }
         }
 
 
@@ -116,7 +123,22 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        private ObservableCollection<TourLog> _selectedTourLogs;
+        public ObservableCollection<TourLog> SelectedTourLogs
+        {
+            get => _selectedTourLogs;
+            set
+            {
+                if (_selectedTourLogs != value)
+                {
+                    _selectedTourLogs = value;
+                    OnPropertyChanged(nameof(SelectedTourLogs));
+                }
+            }
+        }
+
         private ITourService _tourService;
+        private ITourLogService _tourLogService;
         public void LoadAllTours()
         {
             List<Route> allTours = _tourService.GetAllTours();
@@ -137,6 +159,7 @@ namespace TourPlanner.ViewModels
 
             DeleteCommand = new RelayCommand(DeleteAction);
             ModifyCommand = new RelayCommand(ModifyAction);
+            
             AddTourCommand = new RelayCommand(o =>
             {
                 if (Name == "")
@@ -220,6 +243,12 @@ namespace TourPlanner.ViewModels
             AddTourVisibility = Visibility.Hidden;
             LoadAllTours();
 
+        }
+
+        public void SelectedTourLog(Guid tourId)
+        {
+            List<TourLog> allTourLogs = _tourLogService.GetAllTourLogsForTour(tourId);
+            SelectedTourLogs = new ObservableCollection<TourLog>(allTourLogs);
         }
 
         public string Name

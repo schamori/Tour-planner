@@ -9,7 +9,7 @@ namespace Bl
 {
     public interface ITourLogService
     {
-        List<Route> GetAllTourLogsForTour(Guid id);
+        List<TourLog> GetAllTourLogsForTour(Guid id);
 
         void AddTourLog(Guid id);
 

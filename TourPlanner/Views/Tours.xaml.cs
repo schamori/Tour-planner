@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using log4net;
 
 namespace TourPlanner.Views
 {
@@ -23,6 +24,7 @@ namespace TourPlanner.Views
     public partial class Tours : UserControl
     {
         // Definiere einen EventHandler mit den TourSelectedEventArgs
+        private static readonly ILog log = LogManager.GetLogger(typeof(Tours));
         public event EventHandler<TourSelectedEventArgs> TourSelected;
 
         public Tours()
@@ -32,9 +34,10 @@ namespace TourPlanner.Views
         }
 
         // Methode zum Auslösen des Events
-        protected virtual void OnTourSelected(Guid tourId)
+        protected virtual void OnTourSelected(TourSelectedEventArgs e)
         {
-            TourSelected?.Invoke(this, new TourSelectedEventArgs(tourId));
+            log.Info("Tour selected: " + e.TourId);
+            TourSelected?.Invoke(this, e);
         }
 
         // Ein Beispiel, wie du das Event auslösen könntest (z.B. bei Auswahl in einer ListBox)
@@ -44,7 +47,7 @@ namespace TourPlanner.Views
             var selectedTour = listBox.SelectedItem as Route; // Tour ist dein Modell oder Datenklasse
             if (selectedTour != null)
             {
-                OnTourSelected(selectedTour.Id);
+                OnTourSelected(new TourSelectedEventArgs(selectedTour.Id));
             }
         }
     }
