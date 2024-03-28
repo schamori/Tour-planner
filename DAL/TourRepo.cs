@@ -8,9 +8,13 @@ using Models;
 
 namespace DAL
 {
-    public class TourRepo
+    public class TourRepo: ITourRepo
     {
         private const string CreateTourTableCommand = @"CREATE TABLE IF NOT EXISTS tours (t_id UUID PRIMARY KEY, t_name varchar, t_description varchar, t_creationTime timestamp, t_from varchar, t_to varchar, t_distance float, t_estimatedTime int, t_transport varchar);";
+        private const string DeleteTourCommand = @"DELETE FROM Tours WHERE t_name = @t_name;";
+        private const string AddCommand = @"INSERT INTO tours (t_id, t_name, t_description, t_distance, t_creationTime, t_estimatedTime, t_from, t_to, t_transport) VALUES ((@t_id), (@t_name), (@t_description), (@t_distance), (@t_creationTime) ,(@t_estimatedTime), (@t_from), (@t_to), (@t_transport));";
+        private const string GetTourCommand = @"SELECT * FROM tours WHERE t_name = @t_name;";
+
         private readonly string _connectionString;
 
         public TourRepo(string connectionString)
@@ -18,12 +22,15 @@ namespace DAL
             _connectionString = connectionString;
             EnsureTables();
         }
-        public Route? Add(Route obj)
+
+        public void Add(Route obj)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
 
-            using var cmd = new NpgsqlCommand("INSERT INTO tours (t_id, t_name, t_description, t_distance, t_creationTime, t_estimatedTime, t_from, t_to, t_transport) VALUES ((@t_id), (@t_name), (@t_description), (@t_distance), (@t_creationTime) ,(@t_estimatedTime), (@t_from), (@t_to), (@t_transport))", connection);
+            using var cmd = new NpgsqlCommand(AddCommand, connection);
+
+
 
             cmd.Parameters.AddWithValue("t_id", obj.Id);
             cmd.Parameters.AddWithValue("t_name", obj.Name);
@@ -37,14 +44,19 @@ namespace DAL
 
             cmd.Prepare();
             int res = cmd.ExecuteNonQuery();
-            if (res != 0)
-            {
-                return obj;
-            }
-            else
-            {
-                return null;
-            }
+        }
+
+        public void DeleteTour(string tourName)
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(DeleteTourCommand, connection);
+
+            cmd.Parameters.AddWithValue("t_name", tourName);
+
+            cmd.Prepare();
+            int res = cmd.ExecuteNonQuery();
+
         }
 
         public List<Route> GetAllTours()
@@ -73,6 +85,38 @@ namespace DAL
                 }
                 return tours;
             }
+        }
+
+        public Route? GetTour(string tourName)
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(GetTourCommand, connection);
+
+            cmd.Parameters.AddWithValue("t_name", tourName);
+
+            cmd.Prepare();
+            var reader = cmd.ExecuteReader();
+            if (!reader.Read())
+            {
+                return null;
+            }
+            return new Route(
+                        reader.GetGuid(reader.GetOrdinal("t_id")),
+                        reader.GetString(reader.GetOrdinal("t_name")),
+                        reader.GetString(reader.GetOrdinal("t_description")),
+                        reader.GetString(reader.GetOrdinal("t_from")),
+                        reader.GetString(reader.GetOrdinal("t_to")),
+                        reader.GetString(reader.GetOrdinal("t_transport")),
+                        reader.GetDouble(reader.GetOrdinal("t_distance")),
+                        reader.GetInt32(reader.GetOrdinal("t_estimatedTime")),
+                        reader.GetDateTime(reader.GetOrdinal("t_creationTime"))
+                        );
+        }
+
+        public void UpdateTour()
+        {
+            throw new NotImplementedException();
         }
 
         private void EnsureTables()

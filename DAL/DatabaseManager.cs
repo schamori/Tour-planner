@@ -35,22 +35,6 @@ namespace DAL
         }
 
         // Beispiel für eine Methode, um alle Touren abzufragen
-        public void GetAllTours()
-        {
-            OpenConnection(connection =>
-            {
-                using (var command = new NpgsqlCommand("SELECT * FROM tours", connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            // Beispiel: Lese Daten und mache etwas damit
-                            Console.WriteLine(reader["column_name"]); // Ersetze 'column_name' mit dem Namen der Spalte, die du auslesen möchtest
-                        }
-                    }
-                }
-            });
-        }
+        
     }
 }

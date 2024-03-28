@@ -31,11 +31,11 @@ namespace TourPlanner
             var connectionString = "Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin";
 
             _dbManager = new DatabaseManager(connectionString);
-            TourRepo tourRepo = new TourRepo(connectionString);
+            ITourRepo tourRepo = new TourRepo(connectionString);
 
-
+            ITourService tourService = new TourService(tourRepo);
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel(tourRepo, _dbManager, new AddTourViewModel());
+            this.DataContext = new MainWindowViewModel(tourService, _dbManager, new AddTourViewModel());
         }
 
     }

@@ -15,8 +15,12 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Margin="5"/>
-                        <Button Content="Add" Margin="5" />
-                        <Button Content="Delete" Margin="5" />
+                        <Button Command="{Binding DataContext.ModifyCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+        CommandParameter="{Binding}" 
+        Content="Modify" Margin="5" />
+                        <Button Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType={x:Type ListBox}}}" 
+        CommandParameter="{Binding}" 
+        Content="Delete" Margin="5" />
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
@@ -33,8 +37,6 @@
                 </TransformGroup>
             </StackPanel.RenderTransform>
             <Button Command="{Binding GotToAddCommand}"  Content="Add" Margin="5"/>
-            <Button Content="Delete" Margin="5"/>
-            <Button Content="Modify" Margin="5"/>
         </StackPanel>
     </StackPanel>
 </UserControl>
