@@ -27,7 +27,7 @@ namespace Bl
             var startLng = (double)startCoords["features"][0]["geometry"]["coordinates"][0];
             var endLat = (double)endCoords["features"][0]["geometry"]["coordinates"][1];
             var endLng = (double)endCoords["features"][0]["geometry"]["coordinates"][0];
-            JObject route = await _orsClient.GetRoute(startLat, startLng, endLat, endLng);
+            JObject route = await _orsClient.GetRoute(startLat, startLng, endLat, endLng, transportType);
 
             // Zugriff auf das erste Feature-Objekt
             var feature = route["features"][0];

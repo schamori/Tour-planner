@@ -195,6 +195,11 @@ namespace TourPlanner.ViewModels
         {
             var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
             Route route;
+            if(TransportType == "Car") { TransportType = "driving-car"; }
+            else if(TransportType == "Truck") { TransportType = "driving-truck"; }
+            else if (TransportType == "Cycling") { TransportType = "cycling-regular"; }
+            else if (TransportType == "Walking") { TransportType = "foot-walking"; }
+            else { TransportType = "wheelchair"; }
             try
             {
                 route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);

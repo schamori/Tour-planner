@@ -24,9 +24,10 @@
             <TextBlock Text="Transport Type" Margin="5"/>
             <ComboBox Text="{Binding TransportType}" Margin="5">
                 <ComboBoxItem>Car</ComboBoxItem>
-                <ComboBoxItem>Bike</ComboBoxItem>
-                <ComboBoxItem>Public Transport</ComboBoxItem>
+                <ComboBoxItem>Truck</ComboBoxItem>
+                <ComboBoxItem>Cycling</ComboBoxItem>
                 <ComboBoxItem>Walking</ComboBoxItem>
+                <ComboBoxItem>Wheelchair</ComboBoxItem>
             </ComboBox>
 
             <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="5"/>

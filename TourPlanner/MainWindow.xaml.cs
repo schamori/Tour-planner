@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using TourPlanner.ViewModels;
 using Bl;
 using DAL;
+using log4net;
 
 namespace TourPlanner
 {
@@ -23,8 +24,10 @@ namespace TourPlanner
     /// </summary>
     /// 
     
+
     public partial class MainWindow : Window
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(MainWindow));
         private DatabaseManager _dbManager;
         public MainWindow()
         {
@@ -36,6 +39,8 @@ namespace TourPlanner
             ITourService tourService = new TourService(tourRepo);
             InitializeComponent();
             this.DataContext = new MainWindowViewModel(tourService, _dbManager, new AddTourViewModel());
+
+            log.Info("Application is starting.");
         }
 
     }

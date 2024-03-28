@@ -5,35 +5,40 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:viewmodels="clr-namespace:TourPlanner.ViewModels" 
         xmlns:local="clr-namespace:TourPlanner.Views"
-
         mc:Ignorable="d"
         Title="Tour Planner" Height="800" Width="800">
     <Grid>
         <!-- Menu Bar -->
         <local:Navbar x:Name="Navbar" />
 
-
         <!-- Main Content Area -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="19.397"/>
-                <ColumnDefinition Width="180.603"/>
+                <ColumnDefinition Width="200"/>
+                <!-- Für Tours und AddTour -->
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="300"/>
+                <!-- Für Map und TourLogs -->
             </Grid.ColumnDefinitions>
 
-            <!-- Sidebar for Navigation -->
-            <local:Tours Visibility="{Binding ToursVisibility}" x:Name="Tours" Grid.ColumnSpan="2" Margin="14,49,5,-49"/>
+            <!-- Sidebar für Navigation bleibt wie vorher -->
+            <local:Tours Visibility="{Binding ToursVisibility}" x:Name="Tours" Grid.Column="0" Margin="14,49,5,-49"/>
+            <local:AddTour Visibility="{Binding AddTourVisibility}" x:Name="AddTour" Grid.Column="0" Margin="14,49,5,-49"/>
 
-            <local:AddTour Visibility="{Binding AddTourVisibility}" x:Name="AddTour" Grid.ColumnSpan="2" Margin="14,49,5,-49"/>
+            <!-- Rechter Bereich für Map und Logs -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <!-- Für Map Display Area -->
+                    <RowDefinition Height="300"/>
+                    <!-- Für Tour Logs Details Pane, feste Höhe -->
+                </Grid.RowDefinitions>
 
+                <!-- Map Display Area -->
+                <local:Map x:Name="Map" Grid.Row="0"/>
 
-            <!-- Map Display Area -->
-            <local:Map x:Name="Map" Grid.Column="2"/>
-
-
-            <!-- Tour Logs Details Pane -->
-            <local:TourLogs x:Name="TourLogs" Grid.Column="3"/>
+                <!-- Tour Logs Details Pane -->
+                <local:TourLogs x:Name="TourLogs" Grid.Row="1"/>
+            </Grid>
 
         </Grid>
     </Grid>
