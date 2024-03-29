@@ -133,6 +133,8 @@ namespace TourPlanner.ViewModels
 
         public ICommand GoToAddLogCommand { get; set; }
 
+        public ICommand GoBackCommand { get; set; }
+
         public TourRepo _dbManager;
 
         private string nameToModify = "";
@@ -183,7 +185,7 @@ namespace TourPlanner.ViewModels
             Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name, Id = tour.Id }));
         }
 
-            public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService, DatabaseManager _dbManager, ViewModelBase addTourViewModel)
+        public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService, DatabaseManager _dbManager, ViewModelBase addTourViewModel)
         {
             _tourService = tourService;
             _tourLogService = tourLogService;
@@ -195,7 +197,11 @@ namespace TourPlanner.ViewModels
                 ToursVisibility = Visibility.Hidden; 
                 AddTourVisibility = Visibility.Visible;
             });
-
+            GoBackCommand = new RelayCommand(o =>
+            {
+                ToursVisibility = Visibility.Visible;
+                AddTourVisibility = Visibility.Hidden;
+            });
             DeleteCommand = new RelayCommand(DeleteAction);
             ModifyCommand = new RelayCommand(ModifyAction);
             
@@ -228,17 +234,6 @@ namespace TourPlanner.ViewModels
                 } else 
                 {
                      OnCreateRouteButtonClick();
-
-                }
-                if (ErrorMessage == "")
-                {
-                    Name = "";
-                    Description = "";
-                    From = "";
-                    To = "";
-                    TransportType = "";
-                    ToursVisibility = Visibility.Hidden;
-                    AddTourVisibility = Visibility.Visible;
                 }
                 
             });
@@ -300,6 +295,7 @@ namespace TourPlanner.ViewModels
             From = route.StartAddress;
             To = route.EndAddress;
             TransportType = route.TransportType;
+            ErrorMessage = "";
             ToursVisibility = Visibility.Hidden;
             AddTourVisibility = Visibility.Visible;
         }
@@ -321,11 +317,20 @@ namespace TourPlanner.ViewModels
             {
                 ErrorMessage = "Start or End Location not found";
                 return;
-
+            }
+            catch (System.ArgumentNullException)
+            {
+                ErrorMessage = "Start or End Location not found";
+                return;
             }
             _tourService.AddTour(route);
             ToursVisibility = Visibility.Visible;
             AddTourVisibility = Visibility.Hidden;
+            Name = "";
+            Description = "";
+            From = "";
+            To = "";
+            TransportType = "";
             LoadAllTours();
 
         }
