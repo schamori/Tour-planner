@@ -12,6 +12,8 @@ namespace Bl
         
         void AddTour(Route route);
 
+        Route? GetTourById(Guid tourId);
+
         Route? GetTour(string tourName);
         void DeleteTour(string tourName);
         void ModifyTour();

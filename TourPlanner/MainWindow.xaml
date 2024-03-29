@@ -27,9 +27,16 @@
                          Grid.Column="0"
                          Margin="14,49,5,-49"/>
             <local:AddTour Visibility="{Binding AddTourVisibility}" x:Name="AddTour" Grid.Column="0" Margin="14,49,5,-49"/>
+            
+            <local:TourDetails Visibility="{Binding TourDetailsVisibility}"
+                         x:Name="TourDetails"
+                         Grid.Column="1"
+                         Margin="10,0,361,392"   
+                               
+                         />
 
             <!-- Rechter Bereich für Map und Logs -->
-            <Grid Grid.Column="1">
+            <Grid Grid.Column="1" Margin="300,87,-300,-87">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <!-- Für Map Display Area -->
@@ -38,11 +45,20 @@
                 </Grid.RowDefinitions>
 
                 <!-- Map Display Area -->
-                <local:Map x:Name="Map" Grid.Row="0"/>
+                <local:Map x:Name="Map" Grid.Row="0" Margin="-66,-83,300,120" RenderTransformOrigin="0.5,0.5">
+                    <local:Map.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform Angle="-0.571"/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </local:Map.RenderTransform>
+                </local:Map>
 
                 <!-- Tour Logs Details Pane -->
-                <local:TourLogs Visibility="{Binding LogVisibility}" x:Name="TourLogs" Grid.Row="1"/>
-                <local:AddTourLog Visibility="{Binding AddLogVisibility}" x:Name="AddTourLog" Grid.Row="1" />
+                <local:TourLogs Visibility="{Binding LogVisibility}" x:Name="TourLogs" Margin="-300,369,300,115" Grid.RowSpan="2"/>
+                <local:AddTourLog Visibility="{Binding AddLogVisibility}" x:Name="AddTourLog" Margin="-300,392,300,92" Grid.RowSpan="2" />
             </Grid>
 
         </Grid>

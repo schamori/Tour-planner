@@ -44,6 +44,8 @@ namespace TourPlanner.ViewModels
             }
         }
 
+
+
         public string Comment
         {
             get => _comment;
@@ -165,6 +167,21 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        private Route _selectedroute;
+        public Route SelectedRoute
+        {
+            get => _selectedroute;
+            set
+            {
+                if (_selectedroute != value)
+                {
+                    _selectedroute = value;
+                    OnPropertyChanged(nameof(SelectedRoute));
+                }
+            }
+
+        }
+
         private ObservableCollection<TourLog> _selectedTourLogs;
         public ObservableCollection<TourLog> SelectedTourLogs
         {
@@ -175,6 +192,7 @@ namespace TourPlanner.ViewModels
                 {
                     _selectedTourLogs = value;
                     OnPropertyChanged(nameof(SelectedTourLogs));
+           
                 }
             }
         }
@@ -355,6 +373,8 @@ namespace TourPlanner.ViewModels
             List<TourLog> allTourLogs = _tourLogService.GetAllTourLogsForTour(tourId);
             SelectedTourLogs = new ObservableCollection<TourLog>(allTourLogs);
             AddLogButtonVisibility = Visibility.Visible;
+            TourDetailsVisibility = Visibility.Visible;
+            SelectedRoute = _tourService.GetTourById(tourId)!;
         }
 
         public string Name
@@ -383,6 +403,17 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        private Visibility _tourDetailsVisibility = Visibility.Hidden;
+
+        public Visibility TourDetailsVisibility
+        {
+            get => _tourDetailsVisibility;
+            set
+            {
+                _tourDetailsVisibility = value;
+                OnPropertyChanged(nameof(TourDetailsVisibility));
+            }
+        }
         public Visibility ToursVisibility
         {
             get => _toursVisibility;

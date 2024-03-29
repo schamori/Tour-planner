@@ -38,6 +38,11 @@ namespace Bl
             return _tourRepo.GetTour(tourName);
         }
 
+        public Route? GetTourById(Guid tourId)
+        {
+            return _tourRepo.GetTourById(tourId);
+        }
+
         public void ModifyTour()
         {
             throw new NotImplementedException();
