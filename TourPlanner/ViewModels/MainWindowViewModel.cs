@@ -49,6 +49,20 @@ namespace TourPlanner.ViewModels
             }
         }
 
+        private string _tourerrorMessage;
+        public string TourErrorMessage
+        {
+            get => _tourerrorMessage;
+            set
+            {
+                if (_tourerrorMessage != value)
+                {
+                    _tourerrorMessage = value;
+                    OnPropertyChanged(nameof(TourErrorMessage));
+                }
+            }
+        }
+
 
 
         public string Comment
@@ -268,38 +282,38 @@ namespace TourPlanner.ViewModels
             {
                 if (TotalTime == "")
                 {
-                    ErrorMessage = "Duration not set";
+                    TourErrorMessage = "Duration not set";
                 }
                 else if (Comment == "")
                 {
-                    ErrorMessage = "Comment not set";
+                    TourErrorMessage = "Comment not set";
                 }
                 else if (TotalDistance == "")
                 {
-                    ErrorMessage = "Distance not set";
+                    TourErrorMessage = "Distance not set";
                 }
                 else if (Difficulty == "")
                 {
-                    ErrorMessage = "Distance not set";
+                    TourErrorMessage = "Distance not set";
                 }
                 else if (Rating == "")
                 {
-                    ErrorMessage = "Distance not set";
+                    TourErrorMessage = "Distance not set";
                 }
                 else if (!System.Text.RegularExpressions.Regex.IsMatch(TotalTime, "^[0-9]+$"))
                 {
-                    ErrorMessage = "Enter time in minutes";
+                    TourErrorMessage = "Enter time in minutes";
                 }
                 else if (!System.Text.RegularExpressions.Regex.IsMatch(TotalDistance, @"^\d+(\,\d+)?$"))
                 {
-                    ErrorMessage = "Enter Distance in meters";
+                    TourErrorMessage = "Enter Distance in meters";
                 }
                 else
                 {
                     OnCreateLogButtonClick();
-
                 }
-                if (ErrorMessage == "")
+
+                if (TourErrorMessage == "")
                 {
                     TotalTime = "";
                     TotalDistance = "";

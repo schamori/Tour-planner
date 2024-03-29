@@ -19,6 +19,8 @@
                 <DataGridTextColumn Header="Duration" Binding="{Binding TotalTime}" Width="*" />
                 <DataGridTextColumn Header="Distance" Binding="{Binding TotalDistance}" Width="*" />
                 <DataGridTextColumn Header="Rating" Binding="{Binding Rating}" Width="*" />
+                <DataGridTextColumn Binding="{Binding TourErrorMessage}" Foreground="Red" />
+
             </DataGrid.Columns>
 
         </DataGrid>
