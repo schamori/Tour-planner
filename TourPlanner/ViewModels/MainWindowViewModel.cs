@@ -5,12 +5,14 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml.Linq;
 using Bl;
 using DAL;
 using log4net;
 using Models;
 using TourPlanner.Views;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TourPlanner.ViewModels
 {
@@ -28,7 +30,10 @@ namespace TourPlanner.ViewModels
         public string _to;
         public string _errorMessage = "";
         public string _comment;
-        public string _duration;
+        public string _totalTime = "";
+        public string _difficulty;
+        public string _rating;
+        public string _totalDistance = "";
         public Guid _id;
 
         public string ErrorMessage
@@ -59,18 +64,6 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public string Duration
-        {
-            get => _duration;
-            set
-            {
-                if (_duration != value)
-                {
-                    _duration = value;
-                    OnPropertyChanged(nameof(Duration));
-                }
-            }
-        }
         public string Description
         {
             get => _description;
@@ -273,7 +266,7 @@ namespace TourPlanner.ViewModels
 
             AddLogCommand = new RelayCommand(o =>
             {
-                if (Duration == "")
+                if (TotalTime == "")
                 {
                     ErrorMessage = "Duration not set";
                 }
@@ -281,18 +274,31 @@ namespace TourPlanner.ViewModels
                 {
                     ErrorMessage = "Comment not set";
                 }
+                else if (TotalDistance == "")
+                {
+                    ErrorMessage = "Distance not set";
+                }
+                /*else if (System.Text.RegularExpressions.Regex.IsMatch(TotalTime, "^[0-9]+$"))
+                {
+                    ErrorMessage = "Enter time in minutes";
+                }
+                else if (System.Text.RegularExpressions.Regex.IsMatch(TotalDistance, @"^\d+(\.\d+)?$"))
+                {
+                    ErrorMessage = "Enter Distance in meters";
+                }*/
                 else
                 {
                     OnCreateLogButtonClick();
 
                 }
-                if (ErrorMessage == "")
+                /*if (ErrorMessage == "")
                 {
-                    Duration = "";
+                    TotalTime = "";
+                    TotalDistance = "";
                     Comment = "";
                     AddLogVisibility = Visibility.Hidden;
                     LogVisibility = Visibility.Visible;
-                }
+                }*/
 
             });
         }
@@ -372,6 +378,7 @@ namespace TourPlanner.ViewModels
         {
             List<TourLog> allTourLogs = _tourLogService.GetAllTourLogsForTour(tourId);
             SelectedTourLogs = new ObservableCollection<TourLog>(allTourLogs);
+            Id = tourId;
             AddLogButtonVisibility = Visibility.Visible;
             TourDetailsVisibility = Visibility.Visible;
             SelectedRoute = _tourService.GetTourById(tourId)!;
@@ -386,6 +393,58 @@ namespace TourPlanner.ViewModels
                 {
                     _name = value;
                     OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+
+        public string Difficulty
+        {
+            get => _difficulty;
+            set
+            {
+                if (_difficulty != value)
+                {
+                    _difficulty = value;
+                    OnPropertyChanged(nameof(Difficulty));
+                }
+            }
+        }
+
+        public string Rating
+        {
+            get => _rating;
+            set
+            {
+                if (_rating != value)
+                {
+                    _rating = value;
+                    OnPropertyChanged(nameof(Rating));
+                }
+            }
+        }
+
+        public string TotalTime
+        {
+            get => _totalTime;
+            set
+            {
+                if (_totalTime != value)
+                {
+                    _totalTime = value;
+                    OnPropertyChanged(nameof(TotalTime));
+                }
+            }
+        }
+
+        public string TotalDistance
+        {
+            get => _totalDistance;
+            set
+            {
+                if (_totalDistance != value)
+                {
+                    _totalDistance = value;
+                    OnPropertyChanged(nameof(TotalDistance));
                 }
             }
         }
@@ -449,9 +508,14 @@ namespace TourPlanner.ViewModels
 
         private void OnCreateLogButtonClick()
         {
-            //_tourLogService.AddTourLog(route);
+
+            if (double.TryParse(TotalDistance, out double distance) && int.TryParse(TotalTime, out int time))
+            {
+                _tourLogService.AddTourLog(Comment, Difficulty, distance, time, Rating, Id);
+            }
             LogVisibility = Visibility.Visible;
             AddLogVisibility = Visibility.Hidden;
+            
         }
 
         public Visibility LogVisibility

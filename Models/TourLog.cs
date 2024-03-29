@@ -14,11 +14,11 @@ namespace Models
         public string Difficulty { get; set; }
         public double TotalDistance { get; set; }
         public int TotalTime { get; set; }
-        public int Rating { get; set; }
+        public string Rating { get; set; }
         // Foreign Key für die Zuordnung zu einer Tour
         public Guid TourId { get; set; }
 
-        public TourLog(string comment, string difficulty, double totoldistance, int totaltime, int rating, Guid tourId) {
+        public TourLog(string comment, string difficulty, double totoldistance, int totaltime, string rating, Guid tourId) {
             Id = Guid.NewGuid();
             Date = DateTime.Now;
             Comment = comment;
@@ -29,7 +29,7 @@ namespace Models
             TourId = tourId;
         }
 
-        public TourLog(Guid id, DateTime date, string comment, string difficulty, double totoldistance, int totaltime, int rating, Guid tourId)
+        public TourLog(Guid id, DateTime date, string comment, string difficulty, double totoldistance, int totaltime, string rating, Guid tourId)
         {
             Id = id;
             Date = date;

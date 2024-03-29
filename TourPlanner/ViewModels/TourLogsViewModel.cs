@@ -17,43 +17,13 @@ namespace TourPlanner.ViewModels
     public class TourLogsViewModel : ViewModelBase
     {
         public ObservableCollection<TourLog> TourLogs { get; private set; }
-        private ITourLogService _tourLogService;
-
-        
-        public string _errorMessage = "";
-
-        public string ErrorMessage
-        {
-            get => _errorMessage;
-            set
-            {
-                if (_errorMessage != value)
-                {
-                    _errorMessage = value;
-                    OnPropertyChanged(nameof(ErrorMessage));
-                }
-            }
-        }
-
 
         public TourLogsViewModel()
         {
-            TourLogs = new ObservableCollection<TourLog>();
+            
 
             
-        }
-
-        public void LoadLogsForTour(Guid tourId)
-        {
-            var logs = _tourLogService.GetAllTourLogsForTour(tourId);
-            TourLogs.Clear();
-            foreach (var log in logs)
-            {
-                TourLogs.Add(log);
-            }
-        }
-
-        
+        }   
 
         
     }
