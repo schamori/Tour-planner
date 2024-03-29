@@ -30,10 +30,10 @@ namespace TourPlanner.ViewModels
         public string _to;
         public string _errorMessage = "";
         public string _comment;
-        public string _totalTime = "";
+        public string _totalTime;
         public string _difficulty;
         public string _rating;
-        public string _totalDistance = "";
+        public string _totalDistance;
         public Guid _id;
 
         public string ErrorMessage
@@ -260,27 +260,35 @@ namespace TourPlanner.ViewModels
                 {
                     ErrorMessage = "Distance not set";
                 }
-                /*else if (System.Text.RegularExpressions.Regex.IsMatch(TotalTime, "^[0-9]+$"))
+                else if (Difficulty == "")
+                {
+                    ErrorMessage = "Distance not set";
+                }
+                else if (Rating == "")
+                {
+                    ErrorMessage = "Distance not set";
+                }
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(TotalTime, "^[0-9]+$"))
                 {
                     ErrorMessage = "Enter time in minutes";
                 }
-                else if (System.Text.RegularExpressions.Regex.IsMatch(TotalDistance, @"^\d+(\.\d+)?$"))
+                else if (!System.Text.RegularExpressions.Regex.IsMatch(TotalDistance, @"^\d+(\,\d+)?$"))
                 {
                     ErrorMessage = "Enter Distance in meters";
-                }*/
+                }
                 else
                 {
                     OnCreateLogButtonClick();
 
                 }
-                /*if (ErrorMessage == "")
+                if (ErrorMessage == "")
                 {
                     TotalTime = "";
                     TotalDistance = "";
                     Comment = "";
-                    AddLogVisibility = Visibility.Hidden;
-                    LogVisibility = Visibility.Visible;
-                }*/
+                    Difficulty = "";
+                    Rating = "";
+                }
 
             });
         }
@@ -482,6 +490,7 @@ namespace TourPlanner.ViewModels
             {
                 _tourLogService.AddTourLog(Comment, Difficulty, distance, time, Rating, Id);
             }
+            SelectedTourLogs.Clear();
             LogVisibility = Visibility.Visible;
             AddLogVisibility = Visibility.Hidden;
             
