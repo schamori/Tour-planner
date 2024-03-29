@@ -192,17 +192,6 @@ namespace TourPlanner.ViewModels
                 } else 
                 {
                      OnCreateRouteButtonClick();
-
-                }
-                if (ErrorMessage == "")
-                {
-                    Name = "";
-                    Description = "";
-                    From = "";
-                    To = "";
-                    TransportType = "";
-                    ToursVisibility = Visibility.Hidden;
-                    AddTourVisibility = Visibility.Visible;
                 }
                 
             });
@@ -227,6 +216,11 @@ namespace TourPlanner.ViewModels
             From = route.StartAddress;
             To = route.EndAddress;
             TransportType = route.TransportType;
+            Name = "";
+            Description = "";
+            From = "";
+            To = "";
+            TransportType = "";
             ToursVisibility = Visibility.Hidden;
             AddTourVisibility = Visibility.Visible;
         }
@@ -248,7 +242,11 @@ namespace TourPlanner.ViewModels
             {
                 ErrorMessage = "Start or End Location not found";
                 return;
-
+            }
+            catch (System.ArgumentNullException)
+            {
+                ErrorMessage = "Start or End Location not found";
+                return;
             }
             _tourService.AddTour(route);
             ToursVisibility = Visibility.Visible;
