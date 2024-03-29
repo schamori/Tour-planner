@@ -33,6 +33,8 @@
             <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="5"/>
 
             <Button Content="Submit" Command="{Binding AddTourCommand}" Margin="5"/>
+            <Button Content="Back" Command="{Binding GoBackCommand}" Margin="5"/>
+
 
         </StackPanel>
     </ScrollViewer>
