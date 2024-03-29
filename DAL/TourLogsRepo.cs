@@ -10,7 +10,7 @@ namespace DAL
 {
     public class TourLogsRepo : ITourLogRepo
     {
-        private const string CreateTourTableCommand = @"CREATE TABLE IF NOT EXISTS tourlogs (tlog_id UUID PRIMARY KEY, tlog_comment varchar, tlog_creationTime timestamp, tlog_difficulty varchar, tlog_totaltime int, tlog_distance float, tlog_rating int, t_id UUID);";
+        private const string CreateTourTableCommand = @"CREATE TABLE IF NOT EXISTS tourlogs (tlog_id UUID PRIMARY KEY, tlog_comment varchar, tlog_creationTime timestamp, tlog_difficulty varchar, tlog_totaltime int, tlog_distance float, tlog_rating varchar, t_id UUID);";
         private const string DeleteTourCommand = @"DELETE FROM tourlogs WHERE tlog_id = @tlog_id;";
         private const string AddCommand = @"INSERT INTO tourlogs (t_id, t_name, t_description, t_distance, t_creationTime, t_estimatedTime, t_from, t_to, t_transport) VALUES ((@t_id), (@t_name), (@t_description), (@t_distance), (@t_creationTime) ,(@t_estimatedTime), (@t_from), (@t_to), (@t_transport));";
         private const string GetTourLogsCommand = @"SELECT * FROM tourlogs WHERE t_id = @t_id;";
@@ -74,7 +74,7 @@ namespace DAL
                         reader.GetString(reader.GetOrdinal("tlog_difficulty")),
                         reader.GetDouble(reader.GetOrdinal("tlog_distance")),
                         reader.GetInt32(reader.GetOrdinal("tlog_totaltime")),
-                        reader.GetInt32(reader.GetOrdinal("tlog_rating")),
+                        reader.GetString(reader.GetOrdinal("tlog_rating")),
                         reader.GetGuid(reader.GetOrdinal("t_id"))
                         ));
                 }

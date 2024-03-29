@@ -15,9 +15,10 @@ namespace Bl
         {
             _tourLogRepo = tourLogRepo;
         }
-        public void AddTourLog(Guid id)
+        public void AddTourLog(string comment, string difficulty, double totalDistance, int totalTime, string rating, Guid id)
         {
-            throw new NotImplementedException();
+            TourLog tourLog = new TourLog(comment, difficulty, totalDistance, totalTime, rating, id);
+            _tourLogRepo.AddTourLog(tourLog);
         }
 
         public void DeleteTour(string tourName)

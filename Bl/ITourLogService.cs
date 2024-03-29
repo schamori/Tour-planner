@@ -11,7 +11,7 @@ namespace Bl
     {
         List<TourLog> GetAllTourLogsForTour(Guid id);
 
-        void AddTourLog(Guid id);
+        void AddTourLog(string comment, string difficulty, double totalDistance, int totalTime, string rating, Guid id);
 
         Route? GetTour(string tourName);
         void DeleteTour(string tourName);
