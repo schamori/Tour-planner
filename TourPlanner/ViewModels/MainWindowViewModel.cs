@@ -122,11 +122,15 @@ namespace TourPlanner.ViewModels
         public ICommand ModifyCommand { get; set; }
 
         public ICommand AddTourCommand { get; set; }
+
         public ICommand AddLogCommand { get; set; }
         public ICommand CancleLogCommand { get; set; }
         public ICommand OpenAddLogCommand { get; set; }
 
         public ICommand GoToAddLogCommand { get; set; }
+
+        public ICommand ModifyLogCommand { get; }
+        public ICommand DeleteLogCommand { get; }
 
         public ICommand GoBackCommand { get; set; }
 
@@ -159,6 +163,7 @@ namespace TourPlanner.ViewModels
                 }
             }
         }
+
 
         private Route _selectedroute;
         public Route SelectedRoute
@@ -200,6 +205,7 @@ namespace TourPlanner.ViewModels
 
         public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService, DatabaseManager _dbManager, ViewModelBase addTourViewModel)
         {
+            
             _tourService = tourService;
             _tourLogService = tourLogService;
 
@@ -218,7 +224,9 @@ namespace TourPlanner.ViewModels
             });
             DeleteCommand = new RelayCommand(DeleteAction);
             ModifyCommand = new RelayCommand(ModifyAction);
-            
+            ModifyLogCommand = new RelayCommand(ModifyLogAction);
+            DeleteLogCommand = new RelayCommand(DeleteLogAction);
+
             AddTourCommand = new RelayCommand(o =>
             {
                 if (nameToModify != "")
@@ -525,6 +533,29 @@ namespace TourPlanner.ViewModels
             LogVisibility = Visibility.Visible;
             AddLogVisibility = Visibility.Hidden;
             
+        }
+
+        public class Log
+        {
+            public Guid Id { get; set; }
+        }
+        private void DeleteLogAction(object parameter)
+        {
+            //
+        }
+
+        private void ModifyLogAction(object parameter)
+        {
+            Log log = parameter as Log;
+
+            TourLog tourLog = _tourLogService.GetLog(log.Id);
+            Comment = tourLog.Comment;
+            Difficulty = tourLog.Difficulty;
+            Rating = tourLog.Rating;
+            TotalDistance = tourLog.TotalDistance.ToString();
+            TotalTime = tourLog.TotalTime.ToString();
+            LogVisibility = Visibility.Hidden;
+            AddLogVisibility = Visibility.Visible;
         }
 
         public Visibility LogVisibility

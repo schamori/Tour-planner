@@ -13,7 +13,7 @@ namespace Bl
 
         void AddTourLog(string comment, string difficulty, double totalDistance, int totalTime, string rating, Guid id);
 
-        Route? GetTour(string tourName);
+        TourLog? GetLog(Guid id);
         void DeleteTour(string tourName);
         void ModifyTour();
     }

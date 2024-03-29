@@ -31,9 +31,9 @@ namespace Bl
             return _tourLogRepo.GetAllTourLogsForTour(id);
         }
 
-        public Route? GetTour(string tourName)
+        public TourLog? GetLog(Guid id)
         {
-            throw new NotImplementedException();
+            return _tourLogRepo.GetSingleLog(id);
         }
 
         public void ModifyTour()

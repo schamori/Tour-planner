@@ -16,15 +16,11 @@ namespace TourPlanner.ViewModels
 {
     public class TourLogsViewModel : ViewModelBase
     {
-        public ObservableCollection<TourLog> TourLogs { get; private set; }
-
+       
         public TourLogsViewModel()
         {
             
-
-            
-        }   
-
+        }
         
     }
 }

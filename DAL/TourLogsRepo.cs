@@ -14,6 +14,7 @@ namespace DAL
         private const string DeleteTourCommand = @"DELETE FROM tourlogs WHERE tlog_id = @tlog_id;";
         private const string AddCommand = @"INSERT INTO tourlogs (tlog_id, tlog_comment, tlog_creationTime, tlog_difficulty, tlog_totaltime, tlog_distance, tlog_rating, t_id) VALUES ((@tlog_id), (@tlog_comment), (@tlog_creationTime), (@tlog_difficulty), (@tlog_totaltime) ,(@tlog_distance), (@tlog_rating), (@t_id));";
         private const string GetTourLogsCommand = @"SELECT * FROM tourlogs WHERE t_id = @t_id;";
+        private const string GetSingleLogCommand = @"SELECT * FROM tourlogs WHERE tlog_id = @tlog_id;";
 
         private readonly string _connectionString;
 
@@ -80,6 +81,31 @@ namespace DAL
                 }
                 return tours;
             }
+        }
+
+        public TourLog GetSingleLog(Guid id)
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            using var cmd = new NpgsqlCommand(GetSingleLogCommand, connection);
+            cmd.Parameters.AddWithValue("tlog_id", id);
+            cmd.Prepare();
+            var reader = cmd.ExecuteReader();
+            if (!reader.Read())
+            {
+                return null;
+            }
+            return new TourLog(
+                        reader.GetGuid(reader.GetOrdinal("tlog_id")),
+                        reader.GetDateTime(reader.GetOrdinal("tlog_creationTime")),
+                        reader.GetString(reader.GetOrdinal("tlog_comment")),
+                        reader.GetString(reader.GetOrdinal("tlog_difficulty")),
+                        reader.GetDouble(reader.GetOrdinal("tlog_distance")),
+                        reader.GetInt32(reader.GetOrdinal("tlog_totaltime")),
+                        reader.GetString(reader.GetOrdinal("tlog_rating")),
+                        reader.GetGuid(reader.GetOrdinal("t_id"))
+                        );
         }
 
         public void UpdateTourLog()
