@@ -222,11 +222,7 @@ namespace TourPlanner.ViewModels
             From = route.StartAddress;
             To = route.EndAddress;
             TransportType = route.TransportType;
-            Name = "";
-            Description = "";
-            From = "";
-            To = "";
-            TransportType = "";
+            ErrorMessage = "";
             ToursVisibility = Visibility.Hidden;
             AddTourVisibility = Visibility.Visible;
         }
