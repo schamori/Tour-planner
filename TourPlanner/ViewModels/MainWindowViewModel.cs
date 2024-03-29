@@ -23,17 +23,17 @@ namespace TourPlanner.ViewModels
         private Visibility _logVisibility = Visibility.Visible;
         private Visibility _addLogVisibility = Visibility.Hidden;
 
-        public string _name;
-        public string _description;
-        public string _transportType;
-        public string _from;
-        public string _to;
+        public string _name = "";
+        public string _description = "";
+        public string _transportType = "";
+        public string _from = "";
+        public string _to = "";
         public string _errorMessage = "";
-        public string _comment;
-        public string _totalTime;
-        public string _difficulty;
-        public string _rating;
-        public string _totalDistance;
+        public string _comment = "";
+        public string _totalTime = "";
+        public string _difficulty = "";
+        public string _rating = "";
+        public string _totalDistance = "";
         public Guid _id;
 
         public string ErrorMessage
