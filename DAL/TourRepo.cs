@@ -16,6 +16,8 @@ namespace DAL
         private const string GetTourCommand = @"SELECT * FROM tours WHERE t_name = @t_name;";
         private const string UpdateCommand = @" UPDATE tours SET t_description = @t_description, t_distance = @t_distance, t_creationTime = @t_creationTime, t_estimatedTime = @t_estimatedTime, t_from = @t_from, t_to = @t_to, t_transport = @t_transport WHERE t_name = @t_name; ";
 
+        private const string GetTourByIdCommand = @"SELECT * FROM tours WHERE t_id = @t_id;";
+
         private readonly string _connectionString;
 
         public TourRepo(string connectionString)
@@ -95,6 +97,33 @@ namespace DAL
             using var cmd = new NpgsqlCommand(GetTourCommand, connection);
 
             cmd.Parameters.AddWithValue("t_name", tourName);
+
+            cmd.Prepare();
+            var reader = cmd.ExecuteReader();
+            if (!reader.Read())
+            {
+                return null;
+            }
+            return new Route(
+                        reader.GetGuid(reader.GetOrdinal("t_id")),
+                        reader.GetString(reader.GetOrdinal("t_name")),
+                        reader.GetString(reader.GetOrdinal("t_description")),
+                        reader.GetString(reader.GetOrdinal("t_from")),
+                        reader.GetString(reader.GetOrdinal("t_to")),
+                        reader.GetString(reader.GetOrdinal("t_transport")),
+                        reader.GetDouble(reader.GetOrdinal("t_distance")),
+                        reader.GetInt32(reader.GetOrdinal("t_estimatedTime")),
+                        reader.GetDateTime(reader.GetOrdinal("t_creationTime"))
+                        );
+        }
+
+        public Route? GetTourById(Guid tourId)
+        {
+            using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+            using var cmd = new NpgsqlCommand(GetTourByIdCommand, connection);
+
+            cmd.Parameters.AddWithValue("t_id", tourId);
 
             cmd.Prepare();
             var reader = cmd.ExecuteReader();

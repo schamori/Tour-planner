@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using TourPlanner.ViewModels;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -24,7 +23,6 @@ namespace TourPlanner.Views
     /// </summary>
     public partial class Tours : UserControl
     {
-        // Definiere einen EventHandler mit den TourSelectedEventArgs
         public event EventHandler<TourSelectedEventArgs> TourSelected;
 
         public Tours()
@@ -36,7 +34,7 @@ namespace TourPlanner.Views
         // Methode zum Auslösen des Events
         protected virtual void OnTourSelected(TourSelectedEventArgs e)
         {
-            TourSelected?.Invoke(this, e);
+            TourSelected.Invoke(this, e);
         }
 
         // Ein Beispiel, wie du das Event auslösen könntest (z.B. bei Auswahl in einer ListBox)

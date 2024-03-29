@@ -15,6 +15,8 @@ namespace DAL
         void DeleteTour(string tourName);
         void UpdateTour(Route obj);
 
+        public Route? GetTourById(Guid tourId);
+
 
     }
 }
