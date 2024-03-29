@@ -128,6 +128,8 @@ namespace TourPlanner.ViewModels
 
         public ICommand GoBackCommand { get; set; }
 
+        public ICommand OnTourClick { get; set; }
+
         public TourRepo _dbManager;
 
         private string nameToModify = "";
@@ -185,6 +187,7 @@ namespace TourPlanner.ViewModels
 
             LoadAllTours();
 
+            OnTourClick = new RelayCommand(SelectTour);
             GotToAddCommand = new RelayCommand(o =>
             {
                 ToursVisibility = Visibility.Hidden; 
@@ -304,6 +307,18 @@ namespace TourPlanner.ViewModels
             ErrorMessage = "";
             ToursVisibility = Visibility.Hidden;
             AddTourVisibility = Visibility.Visible;
+        }
+
+        private void SelectTour(object sender)
+        {
+            var listBox = sender as ListBox;
+            var selectedTour = listBox.SelectedItem as TourPlanner.ViewModels.MainWindowViewModel.Tour;
+
+            if (selectedTour != null)
+            {
+                ;
+
+            }
         }
         private async void OnCreateRouteButtonClick()
         {
