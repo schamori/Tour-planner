@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Xml.Linq;
 using Bl;
 using DAL;
 using log4net;
@@ -17,6 +18,8 @@ namespace TourPlanner.ViewModels
     {
         private Visibility _toursVisibility = Visibility.Visible;
         private Visibility _addTourVisibility = Visibility.Hidden;
+        private Visibility _logVisibility = Visibility.Visible;
+        private Visibility _addLogVisibility = Visibility.Hidden;
 
         public string _name;
         public string _description;
@@ -24,6 +27,8 @@ namespace TourPlanner.ViewModels
         public string _from;
         public string _to;
         public string _errorMessage = "";
+        public string _comment;
+        public string _duration;
         public Guid _id;
 
         public string ErrorMessage
@@ -35,6 +40,32 @@ namespace TourPlanner.ViewModels
                 {
                     _errorMessage = value;
                     OnPropertyChanged(nameof(ErrorMessage));
+                }
+            }
+        }
+
+        public string Comment
+        {
+            get => _comment;
+            set
+            {
+                if (_comment != value)
+                {
+                    _comment = value;
+                    OnPropertyChanged(nameof(Comment));
+                }
+            }
+        }
+
+        public string Duration
+        {
+            get => _duration;
+            set
+            {
+                if (_duration != value)
+                {
+                    _duration = value;
+                    OnPropertyChanged(nameof(Duration));
                 }
             }
         }
@@ -96,6 +127,11 @@ namespace TourPlanner.ViewModels
         public ICommand ModifyCommand { get; set; }
 
         public ICommand AddTourCommand { get; set; }
+        public ICommand AddLogCommand { get; set; }
+        public ICommand CancleLogCommand { get; set; }
+        public ICommand OpenAddLogCommand { get; set; }
+
+        public ICommand GoToAddLogCommand { get; set; }
 
         public TourRepo _dbManager;
 
@@ -206,6 +242,43 @@ namespace TourPlanner.ViewModels
                 }
                 
             });
+
+            GoToAddLogCommand = new RelayCommand(o =>
+            {
+                LogVisibility = Visibility.Hidden;
+                AddLogVisibility = Visibility.Visible;
+            });
+
+            CancleLogCommand = new RelayCommand(o =>
+            {
+                LogVisibility = Visibility.Visible;
+                AddLogVisibility = Visibility.Hidden;
+            });
+
+            AddLogCommand = new RelayCommand(o =>
+            {
+                if (Duration == "")
+                {
+                    ErrorMessage = "Duration not set";
+                }
+                else if (Comment == "")
+                {
+                    ErrorMessage = "Comment not set";
+                }
+                else
+                {
+                    OnCreateLogButtonClick();
+
+                }
+                if (ErrorMessage == "")
+                {
+                    Duration = "";
+                    Comment = "";
+                    AddLogVisibility = Visibility.Hidden;
+                    LogVisibility = Visibility.Visible;
+                }
+
+            });
         }
 
         private void DeleteAction(object parameter)
@@ -257,13 +330,11 @@ namespace TourPlanner.ViewModels
 
         }
 
-        private static readonly ILog log = LogManager.GetLogger(typeof(Tours));
         public void SelectedTourLog(Guid tourId)
         {
             List<TourLog> allTourLogs = _tourLogService.GetAllTourLogsForTour(tourId);
             SelectedTourLogs = new ObservableCollection<TourLog>(allTourLogs);
-            
-            log.Info("geladen" + allTourLogs.Count());
+            AddLogButtonVisibility = Visibility.Visible;
         }
 
         public string Name
@@ -308,6 +379,46 @@ namespace TourPlanner.ViewModels
             {
                 _addTourVisibility = value;
                 OnPropertyChanged(nameof(AddTourVisibility));
+            }
+        }
+
+        private Visibility _addLogButtonVisibility = Visibility.Collapsed;
+        public Visibility AddLogButtonVisibility
+        {
+            get => _addLogButtonVisibility;
+            set
+            {
+                if (_addLogButtonVisibility != value)
+                {
+                    _addLogButtonVisibility = value;
+                    OnPropertyChanged(nameof(AddLogButtonVisibility));
+                }
+            }
+        }
+
+        private void OnCreateLogButtonClick()
+        {
+            //_tourLogService.AddTourLog(route);
+            LogVisibility = Visibility.Visible;
+            AddLogVisibility = Visibility.Hidden;
+        }
+
+        public Visibility LogVisibility
+        {
+            get => _logVisibility;
+            set
+            {
+                _logVisibility = value;
+                OnPropertyChanged(nameof(LogVisibility));
+            }
+        }
+        public Visibility AddLogVisibility
+        {
+            get => _addLogVisibility;
+            set
+            {
+                _addLogVisibility = value;
+                OnPropertyChanged(nameof(AddLogVisibility));
             }
         }
     }
