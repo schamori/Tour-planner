@@ -41,7 +41,8 @@
                 <local:Map x:Name="Map" Grid.Row="0"/>
 
                 <!-- Tour Logs Details Pane -->
-                <local:TourLogs x:Name="TourLogs" Grid.Row="1"/>
+                <local:TourLogs Visibility="{Binding LogVisibility}" x:Name="TourLogs" Grid.Row="1"/>
+                <local:AddTourLog Visibility="{Binding AddLogVisibility}" x:Name="AddTourLog" Grid.Row="1" />
             </Grid>
 
         </Grid>

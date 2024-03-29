@@ -25,7 +25,7 @@
 
         <!-- Add Log Button Area -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="3" Height="50">
-            <Button Content="Add Log" Command="{Binding AddLogCommand}" Margin="5" HorizontalAlignment="Right" Visibility="{Binding AddLogButtonVisibility}"/>
+            <Button Content="Add Log" Command="{Binding GoToAddLogCommand}" Margin="5" HorizontalAlignment="Right" Visibility="{Binding AddLogButtonVisibility}"/>
         </StackPanel>
     </Grid>
 </UserControl>

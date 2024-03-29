@@ -17,7 +17,7 @@ namespace TourPlanner.Views
     /// <summary>
     /// Interaktionslogik für Window1.xaml
     /// </summary>
-    public partial class AddTourLog : Window
+    public partial class AddTourLog : UserControl
     {
         public AddTourLog()
         {
