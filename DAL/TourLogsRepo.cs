@@ -43,6 +43,11 @@ namespace DAL
             int res = cmd.ExecuteNonQuery();
         }
 
+        public void DeleteTour()
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteTourLog(Guid logId)
         {
             using var connection = new NpgsqlConnection(_connectionString);

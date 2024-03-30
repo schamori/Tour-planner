@@ -14,7 +14,7 @@ namespace Bl
         void AddTourLog(string comment, string difficulty, double totalDistance, int totalTime, string rating, Guid id);
 
         TourLog? GetLog(Guid id);
-        void DeleteTour(string tourName);
+        void DeleteTour(Guid tourId);
         void ModifyTour();
     }
 }

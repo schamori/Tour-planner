@@ -9,7 +9,6 @@ namespace DAL
 {
     public interface ITourLogRepo
     {
-
         void AddTourLog(TourLog obj);
         List<TourLog> GetAllTourLogsForTour(Guid id);
         void DeleteTourLog(Guid id);

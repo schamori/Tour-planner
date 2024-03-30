@@ -21,9 +21,9 @@ namespace Bl
             _tourLogRepo.AddTourLog(tourLog);
         }
 
-        public void DeleteTour(string tourName)
+        public void DeleteTour(Guid tourId)
         {
-            throw new NotImplementedException();
+            _tourLogRepo.DeleteTourLog(tourId);
         }
 
         public List<TourLog> GetAllTourLogsForTour(Guid id)

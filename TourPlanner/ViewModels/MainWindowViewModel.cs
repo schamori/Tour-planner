@@ -288,6 +288,12 @@ namespace TourPlanner.ViewModels
 
             AddLogCommand = new RelayCommand(o =>
             {
+                if (_logToModify != null)
+                {
+                    _tourLogService.DeleteTour((Guid)_logToModify);
+                    _logToModify = null;
+                }
+
                 if (TotalTime == "")
                 {
                     TourErrorMessage = "Duration not set";
@@ -395,6 +401,7 @@ namespace TourPlanner.ViewModels
             _tourService.AddTour(route);
             ToursVisibility = Visibility.Visible;
             AddTourVisibility = Visibility.Hidden;
+            ErrorMessage = "";
             Name = "";
             Description = "";
             From = "";
@@ -546,6 +553,7 @@ namespace TourPlanner.ViewModels
             SelectedTourLogs.Clear();
             LogVisibility = Visibility.Visible;
             AddLogVisibility = Visibility.Hidden;
+
             
         }
 
@@ -555,14 +563,14 @@ namespace TourPlanner.ViewModels
         }
         private void DeleteLogAction(object parameter)
         {
-            //
+            TourLog tourLog = parameter as TourLog;
+            _tourLogService.DeleteTour(tourLog.Id);
         }
-
+        private Guid? _logToModify;
         private void ModifyLogAction(object parameter)
         {
-            Log log = parameter as Log;
-
-            TourLog tourLog = _tourLogService.GetLog(log.Id);
+            TourLog tourLog = parameter as TourLog;
+            _logToModify = tourLog.Id;
             Comment = tourLog.Comment;
             Difficulty = tourLog.Difficulty;
             Rating = tourLog.Rating;
