@@ -49,7 +49,7 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        private string _tourerrorMessage;
+        private string _tourerrorMessage = "";
         public string TourErrorMessage
         {
             get => _tourerrorMessage;
@@ -321,19 +321,21 @@ namespace TourPlanner.ViewModels
                 else if (!System.Text.RegularExpressions.Regex.IsMatch(TotalDistance, @"^\d+(\,\d+)?$"))
                 {
                     TourErrorMessage = "Enter Distance in meters";
-                }
-                else
+                } else
                 {
-                    OnCreateLogButtonClick();
+                    TourErrorMessage = "";
                 }
 
                 if (TourErrorMessage == "")
                 {
+                    OnCreateLogButtonClick();
+
                     TotalTime = "";
-                    TotalDistance = "";
                     Comment = "";
+                    TotalDistance = "";
                     Difficulty = "";
                     Rating = "";
+                    TourErrorMessage = "";
                 }
 
             });
@@ -550,7 +552,8 @@ namespace TourPlanner.ViewModels
             {
                 _tourLogService.AddTourLog(Comment, Difficulty, distance, time, Rating, Id);
             }
-            SelectedTourLogs.Clear();
+            SelectedTourLog(Id);
+
             LogVisibility = Visibility.Visible;
             AddLogVisibility = Visibility.Hidden;
 
@@ -565,6 +568,8 @@ namespace TourPlanner.ViewModels
         {
             TourLog tourLog = parameter as TourLog;
             _tourLogService.DeleteTour(tourLog.Id);
+            SelectedTourLog(Id);
+
         }
         private Guid? _logToModify;
         private void ModifyLogAction(object parameter)
