@@ -14,6 +14,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using log4net;
+using TourPlanner.ViewModels;
 using static TourPlanner.ViewModels.MainWindowViewModel;
 
 namespace TourPlanner.Views
@@ -31,21 +32,28 @@ namespace TourPlanner.Views
 
         }
 
-        // Methode zum Auslösen des Events
         protected virtual void OnTourSelected(TourSelectedEventArgs e)
         {
             TourSelected.Invoke(this, e);
         }
 
-        // Ein Beispiel, wie du das Event auslösen könntest (z.B. bei Auswahl in einer ListBox)
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var listBox = sender as ListBox;
-            var selectedTour = listBox.SelectedItem as TourPlanner.ViewModels.MainWindowViewModel.Tour;
-            
+            Tour selectedTour = (Tour)listBox.SelectedItem; 
+
             if (selectedTour != null)
             {
-                OnTourSelected(new TourSelectedEventArgs(selectedTour.Id));
+                // Cast the DataContext to MainWindowViewModel
+                var viewModel = this.DataContext as TourViewModel;
+
+                // Ensure the cast was successful
+                if (viewModel != null)
+                {
+                    // Call the method
+                    viewModel.SelectTour(selectedTour.Id);
+                }
+
             }
         }
     }

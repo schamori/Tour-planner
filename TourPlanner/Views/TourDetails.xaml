@@ -13,7 +13,6 @@
         </Grid.RowDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
 
-            <!-- Details Section -->
             <StackPanel>
                 <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
         <Run Text="From: "/>

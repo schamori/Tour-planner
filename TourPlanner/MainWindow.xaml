@@ -11,24 +11,21 @@
         <!-- Menu Bar -->
         <local:Navbar x:Name="Navbar" />
 
-        <!-- Main Content Area -->
+        <!-- Main Content Area --> 
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <!-- Für Tours und AddTour -->
-                <ColumnDefinition Width="*"/>
-                <!-- Für Map und TourLogs -->
+                <ColumnDefinition Width="200" MinWidth="150"/>
+                <ColumnDefinition Width="*" MinWidth="250"/>
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar für Navigation bleibt wie vorher -->
-            <local:Tours Visibility="{Binding ToursVisibility}"
+            <local:Tours Visibility="{Binding  DataContext.ToursVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" DataContext="{Binding TourVM}"
                          x:Name="ToursView"
-                         TourSelected="ToursView_TourSelected"
                          Grid.Column="0"
                          Margin="14,49,5,-49"/>
-            <local:AddTour Visibility="{Binding AddTourVisibility}" x:Name="AddTour" Grid.Column="0" Margin="14,49,5,-49"/>
-            
-            <local:TourDetails Visibility="{Binding TourDetailsVisibility}"
+            <local:AddTour Visibility="{Binding DataContext.AddTourVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" DataContext="{Binding AddTourVM}" x:Name="AddTour" Grid.Column="0" Margin="14,49,5,-49"/>
+
+            <local:TourDetails Visibility="{Binding DataContext.TourDetailsVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" DataContext="{Binding TourVM}"
                          x:Name="TourDetails"
                          Grid.Column="1"
                          Margin="10,0,361,392"   
@@ -57,8 +54,8 @@
                 </local:Map>
 
                 <!-- Tour Logs Details Pane -->
-                <local:TourLogs Visibility="{Binding LogVisibility}" x:Name="TourLogs" Margin="-300,369,300,115" Grid.RowSpan="2"/>
-                <local:AddTourLog Visibility="{Binding AddLogVisibility}" x:Name="AddTourLog" Margin="-300,392,300,92" Grid.RowSpan="2" />
+                <local:TourLogs Visibility="{Binding DataContext.LogVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" DataContext="{Binding TourLogsVM}" x:Name="TourLogs" Margin="-300,369,300,115" Grid.RowSpan="2"/>
+                <local:AddTourLog Visibility="{Binding DataContext.AddLogVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" DataContext="{Binding AddTourLogsVM}" x:Name="AddTourLog" Margin="-300,392,300,92" Grid.RowSpan="2" />
             </Grid>
 
         </Grid>
