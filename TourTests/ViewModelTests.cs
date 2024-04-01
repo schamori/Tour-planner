@@ -1,22 +1,39 @@
 ﻿using TourPlanner.ViewModels;
 using NUnit.Framework;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Input;
+using Moq;
+using System.Windows;
+using Bl;
+using Models;
 
 namespace TourTests
 {
     public class ViewModelTests
     {
+
+        public Mock<MainWindowViewModel> mockViewModel;
         [SetUp]
         public void Setup()
         {
+            // Assuming MainWindowViewModel has a constructor that takes an IMyService
+            var tourServiceMock = new Mock<ITourService>();
+            var logServiceMock = new Mock<ITourLogService>();
+            tourServiceMock.Setup(service => service.GetAllTours()).Returns(new List<Route>());
+
+
+            mockViewModel = new Mock<MainWindowViewModel>(tourServiceMock.Object, logServiceMock.Object);
+
         }
 
         [Test]
         public void NameProperty_SetsValue_NotifiesPropertyChange()
         {
-            var vm = new MainWindowViewModel(null, null, null, null);
+            var vm = new AddTourViewModel(mockViewModel.Object);
             var wasNotified = false;
             vm.PropertyChanged += (sender, e) => {
-                if (e.PropertyName == nameof(MainWindowViewModel.Name)) wasNotified = true;
+                if (e.PropertyName == nameof(AddTourViewModel.Name)) wasNotified = true;
             };
 
             vm.Name = "New Name";
@@ -24,47 +41,52 @@ namespace TourTests
             Assert.IsTrue(wasNotified, "Setting the Name property did not raise the PropertyChanged event.");
         }
         [Test]
-        public void GotToAddCommand_Executed_ChangesVisibilityProperties()
-        {
-            var vm = new MainWindowViewModel(null, null, null, null);
-            var command = vm.GotToAddCommand as RelayCommand;
-
-            command.Execute(null);
-
-            Assert.AreEqual(Visibility.Hidden, vm.ToursVisibility);
-            Assert.AreEqual(Visibility.Visible, vm.AddTourVisibility);
-        }
-        [Test]
         public void AddTourCommand_ExecutedWithEmptyName_SetsErrorMessage()
         {
-            var vm = new MainWindowViewModel(null, null, null, null);
+            var vm = new AddTourViewModel(mockViewModel.Object);
+
             var command = vm.AddTourCommand as RelayCommand;
 
-            vm.Name = ""; // Simulate user not inputting name
+            vm.Name = "";
+
             command.Execute(null);
 
-            Assert.IsFalse(string.IsNullOrEmpty(vm.ErrorMessage), "ErrorMessage should be set when Name is empty.");
+            Assert.That(vm.ErrorMessage, Is.EqualTo("Name not set"));
         }
-        [Test]
-        public void AddTourCommand_ExecutedSuccessfully_UpdatesToursCollection()
-        {
-            var tourServiceMock = Substitute.For<ITourService>();
-            var newTour = new Route { Name = "Test Tour" };
-            tourServiceMock.GetAllTours().Returns(new List<Route> { newTour });
 
-            var vm = new MainWindowViewModel(tourServiceMock, null, null, null);
-            vm.Name = "Test Tour";
-            vm.Description = "Test Description";
-            vm.From = "Location A";
-            vm.To = "Location B";
-            vm.TransportType = "Walking";
+        [Test]
+        public void AddTourCommand_ExecutedWithEmptyFrom_SetsErrorMessage()
+        {
+            var vm = new AddTourViewModel(mockViewModel.Object);
 
             var command = vm.AddTourCommand as RelayCommand;
+            vm.Name = "Test";
+            vm.Description = "Test";
+
+            vm.From = "";
+
             command.Execute(null);
 
-            tourServiceMock.Received(1).AddTour(Arg.Any<Route>());
-            Assert.AreEqual(1, vm.Tours.Count);
-            Assert.AreEqual("Test Tour", vm.Tours.First().Name);
+            Assert.That(vm.ErrorMessage, Is.EqualTo("From location not set"));
+        }
+
+        [Test]
+        public void AddTourCommand_ExecutedWithEmptyTo_SetsErrorMessage()
+        {
+            var vm = new AddTourViewModel(mockViewModel.Object);
+
+            var command = vm.AddTourCommand as RelayCommand;
+
+            vm.Name = "Test";
+
+            vm.Description = "Test";
+            vm.From = "Vienna";
+
+            vm.To = "";
+
+            command.Execute(null);
+
+            Assert.That(vm.ErrorMessage, Is.EqualTo("To location not set"));
         }
 
 

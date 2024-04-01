@@ -18,7 +18,7 @@ namespace TourPlanner.ViewModels
 {
     public class TourLogsViewModel : ViewModelBase
     {
-        private readonly MainWindowViewModel _mainViewModel;
+        public readonly MainWindowViewModel _mainViewModel;
 
         private ObservableCollection<TourLog> _selectedTourLogs;
         public ObservableCollection<TourLog> SelectedTourLogs

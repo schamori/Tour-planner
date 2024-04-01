@@ -19,7 +19,7 @@ namespace TourPlanner.ViewModels
     public class TourViewModel : ViewModelBase
     {
 
-        private readonly MainWindowViewModel _mainViewModel;
+        public readonly MainWindowViewModel _mainViewModel;
 
         public ObservableCollection<Tour> _tours;
 
