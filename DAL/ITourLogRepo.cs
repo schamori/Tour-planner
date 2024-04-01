@@ -14,5 +14,6 @@ namespace DAL
         void DeleteTourLog(Guid id);
         TourLog GetSingleLog(Guid id);
         void UpdateTourLog();
+        void UpdateLogId(Guid oldTourId, Guid tourId);
     }
 }

@@ -26,7 +26,7 @@ namespace DAL
             EnsureTables();
         }
 
-        public void Add(Route obj)
+        public Route Add(Route obj)
         {
             using var connection = new NpgsqlConnection(_connectionString);
             connection.Open();
@@ -47,6 +47,7 @@ namespace DAL
 
             cmd.Prepare();
             int res = cmd.ExecuteNonQuery();
+            return obj;
         }
 
         public void DeleteTour(string tourName)

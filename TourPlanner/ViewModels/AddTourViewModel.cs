@@ -16,6 +16,7 @@ namespace TourPlanner.ViewModels
         private string _from = "";
         private string _to = "";
         private string _errorMessage = "";
+        private Guid _id;
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -28,6 +29,20 @@ namespace TourPlanner.ViewModels
                 }
             }
         }
+
+        public Guid Id
+        {
+            get => _id;
+            set
+            {
+                if (_id != value)
+                {
+                    _id = value;
+                    OnPropertyChanged(nameof(Id));
+                }
+            }
+        }
+
         public string Name
         {
             get => _name;
@@ -104,7 +119,7 @@ namespace TourPlanner.ViewModels
             GoBackCommand = new RelayCommand(o => { ExecuteGoBack(); });
         }
 
-        private async void CreateNewTour()
+        private async void CreateNewTour(bool update, Guid oldTourId)
         {
             var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
             Route route;
@@ -138,12 +153,20 @@ namespace TourPlanner.ViewModels
             To = "";
             TransportType = "";
             ExecuteGoBack();
+            if(update == true)
+            {
+                _mainViewModel._tourLogService.UpdateLogId(oldTourId, route.Id);
+            }
             _mainViewModel.TourVM.LoadAllTours();
         }
         private void ExecuteAddTour(object paramters)
         {
+            bool update = false;
             if (nameToModify != "")
+            {
                 _mainViewModel._tourService.DeleteTour(nameToModify);
+                update = true;
+            }
             if (Name == "")
             {
                 ErrorMessage = "Name not set";
@@ -170,7 +193,7 @@ namespace TourPlanner.ViewModels
             }
             else
             {
-                CreateNewTour();
+                CreateNewTour(update, Id);
             }
         }
 

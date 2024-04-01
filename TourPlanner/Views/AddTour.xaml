@@ -8,6 +8,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <StackPanel Margin="10">
+            <TextBox Text="{Binding Id}" Visibility="Visible"/>
 
             <TextBlock Text="Name" Margin="5"/>
             <TextBox Text="{Binding Name}" Margin="5"/>
@@ -24,7 +25,7 @@
             <TextBlock Text="Transport Type" Margin="5"/>
             <ComboBox Text="{Binding TransportType}" Margin="5">
                 <ComboBoxItem>driving-car</ComboBoxItem>
-                <ComboBoxItem>driving-truck</ComboBoxItem>
+                <ComboBoxItem>driving-hgv</ComboBoxItem>
                 <ComboBoxItem>cycling-regular</ComboBoxItem>
                 <ComboBoxItem>foot-walking</ComboBoxItem>
                 <ComboBoxItem>wheelchair</ComboBoxItem>

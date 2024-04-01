@@ -90,6 +90,7 @@ namespace TourPlanner.ViewModels
 
             Route route = _mainViewModel._tourService.GetTour(tour!.Name)!;
             _mainViewModel.AddTourVM.nameToModify = route.Name;
+            _mainViewModel.AddTourVM.Id = route.Id;
             _mainViewModel.AddTourVM.Name = route.Name;
             _mainViewModel.AddTourVM.Description = route.Description;
             _mainViewModel.AddTourVM.From = route.StartAddress;
