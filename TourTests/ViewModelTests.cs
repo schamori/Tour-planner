@@ -1,4 +1,5 @@
 ﻿using TourPlanner.ViewModels;
+using NUnit.Framework;
 
 namespace TourTests
 {
