@@ -17,6 +17,26 @@ namespace TourPlanner.ViewModels
         private string _to = "";
         private string _errorMessage = "";
         private Guid _id;
+        private bool _isCommandExecuting = false;
+
+        public bool IsCommandExecuting
+        {
+            get => _isCommandExecuting;
+            set
+            {
+                if (_isCommandExecuting != value)
+                {
+                    _isCommandExecuting = value;
+                    OnPropertyChanged(nameof(IsCommandExecuting));
+                }
+            }
+        }
+
+        private bool CanExecuteAddTour(object parameter)
+        {
+            return !IsCommandExecuting;
+}
+
         public string ErrorMessage
         {
             get => _errorMessage;
@@ -115,7 +135,7 @@ namespace TourPlanner.ViewModels
         {
             _mainViewModel = mainViewModel;
 
-            AddTourCommand = new RelayCommand(ExecuteAddTour);
+            AddTourCommand = new RelayCommand(ExecuteAddTour, CanExecuteAddTour);
             GoBackCommand = new RelayCommand(o => { ExecuteGoBack(); });
         }
 
@@ -158,9 +178,13 @@ namespace TourPlanner.ViewModels
                 _mainViewModel._tourLogService.UpdateLogId(oldTourId, route.Id);
             }
             _mainViewModel.TourVM.LoadAllTours();
+            IsCommandExecuting = false;
+
         }
         private void ExecuteAddTour(object paramters)
         {
+            IsCommandExecuting = true;
+
             bool update = false;
             if (nameToModify != "")
             {
