@@ -17,7 +17,6 @@ namespace TourTests
         [SetUp]
         public void Setup()
         {
-            // Assuming MainWindowViewModel has a constructor that takes an IMyService
             var tourServiceMock = new Mock<ITourService>();
             var logServiceMock = new Mock<ITourLogService>();
             tourServiceMock.Setup(service => service.GetAllTours()).Returns(new List<Route>());

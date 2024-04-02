@@ -151,16 +151,22 @@ namespace TourPlanner.ViewModels
             catch (System.ArgumentOutOfRangeException)
             {
                 ErrorMessage = "Start or End Location not found";
+                IsCommandExecuting = false;
+
                 return;
             }
             catch (System.Net.Http.HttpRequestException)
             {
                 ErrorMessage = "Start or End Location not found";
+                IsCommandExecuting = false;
+
                 return;
             }
             catch (System.ArgumentNullException)
             {
                 ErrorMessage = "Start or End Location not found";
+                IsCommandExecuting = false;
+
                 return;
             }
             _mainViewModel._tourService.AddTour(route);
@@ -190,30 +196,44 @@ namespace TourPlanner.ViewModels
             {
                 _mainViewModel._tourService.DeleteTour(nameToModify);
                 update = true;
+                IsCommandExecuting = false;
+
             }
             if (Name == "")
             {
                 ErrorMessage = "Name not set";
+                IsCommandExecuting = false;
+
             }
             else if (_mainViewModel._tourService.GetTour(Name) != null)
             {
                 ErrorMessage = "Name already taken";
+                IsCommandExecuting = false;
+
             }
             else if (Description == "")
             {
                 ErrorMessage = "Description not set";
+                IsCommandExecuting = false;
+
             }
             else if (From == "")
             {
                 ErrorMessage = "From location not set";
+                IsCommandExecuting = false;
+
             }
             else if (To == "")
             {
                 ErrorMessage = "To location not set";
+                IsCommandExecuting = false;
+
             }
             else if (TransportType == "")
             {
                 ErrorMessage = "TransportType not set";
+                IsCommandExecuting = false;
+
             }
             else
             {
