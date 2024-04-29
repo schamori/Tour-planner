@@ -10,7 +10,7 @@ namespace DAL
     {
         Route? GetTour(string tourName);
 
-        Route Add(Route obj);
+        void Add(Route obj);
         List<Route> GetAllTours();
         void DeleteTour(string tourName);
         void UpdateTour(Route obj);

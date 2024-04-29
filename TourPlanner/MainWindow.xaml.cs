@@ -41,8 +41,7 @@ namespace TourPlanner
             AppDbContext _context = new AppDbContext(optionsBuilder.Options);
             _context.Database.Migrate();
             _context.EnsureDatabase();
-            DatabaseManager _dbManager = new DatabaseManager(connectionString);
-            ITourRepo tourRepo = new TourRepo(connectionString);
+            ITourRepo tourRepo = new TourRepo(_context);
             ITourLogRepo tourLogRepo = new TourLogsRepo(_context);
 
             ITourService tourService = new TourService(tourRepo);

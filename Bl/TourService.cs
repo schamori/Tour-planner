@@ -16,10 +16,10 @@ namespace Bl
         {
             _tourRepo = tourRepo;
         }
-        public Route AddTour(Route route)
+        public void AddTour(Route route)
         {
 
-           return _tourRepo.Add(route);
+           _tourRepo.Add(route);
         }
 
         public void DeleteTour(string tourName)

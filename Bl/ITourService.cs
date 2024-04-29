@@ -10,7 +10,7 @@ namespace Bl
     {
         List<Route> GetAllTours();
         
-        Route AddTour(Route route);
+        void AddTour(Route route);
 
         Route? GetTourById(Guid tourId);
 

@@ -20,7 +20,13 @@ namespace Models
         public string TransportType { get; set; }
         public double Distance { get; set; }
         public int EstimatedTime { get; set; }
-        public DateTime CreationDate { get; set; }
+        private DateTime _date;
+
+        public DateTime CreationDate
+        {
+            get => _date;
+            set => _date = value.Kind == DateTimeKind.Utc ? value : value.ToUniversalTime();
+        }
 
         public Route(Guid id, string name, string description, string startAddress, string endAddress, string transportType, double distance, int estimatedTime, DateTime creationDate)
         {
@@ -35,17 +41,7 @@ namespace Models
             CreationDate = creationDate;
         }
 
-        public Route(string name, string description, string startAddress, string endAddress, string transportType, double distance, int estimatedTime, DateTime creationDate) {
-            Id = Guid.NewGuid();
-            Name = name;
-            Description = description;
-            StartAddress = startAddress;
-            EndAddress = endAddress;
-            TransportType = transportType;
-            Distance = distance;
-            EstimatedTime = estimatedTime;
-            CreationDate = creationDate;
-        }
+
 
         
     }
