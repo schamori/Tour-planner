@@ -25,10 +25,6 @@ namespace DAL
             _context.SaveChanges();
         }
 
-        public void DeleteTour()
-        {
-            throw new NotImplementedException();
-        }
 
         public void DeleteTourLog(Guid logId)
         {
@@ -60,22 +56,15 @@ namespace DAL
 
         public void UpdateLogId(Guid oldTourId, Guid tourId)
         {
-             /* using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-
-            using var cmd = new NpgsqlCommand(UpdateCommand, connection);
-
-            cmd.Parameters.AddWithValue("t_idold", oldTourId);
-            cmd.Parameters.AddWithValue("t_idnew", tourId);
-
-            cmd.Prepare();
-            int res = cmd.ExecuteNonQuery(); */
+            var tour = _context.Routes.FirstOrDefault(t => t.Id == oldTourId);
+            if (tour != null)
+            {
+                tour.Id = tourId;
+                _context.SaveChanges();
+            }
         }
 
-        public void UpdateTourLog()
-        {
-            throw new NotImplementedException();
-        }
+
     }
 
 }
