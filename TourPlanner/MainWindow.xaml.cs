@@ -32,7 +32,6 @@ namespace TourPlanner
     public partial class MainWindow : Window
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(MainWindow));
-        private DatabaseManager _dbManager;
         public MainWindow()
         {
             var connectionString = "Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin";
@@ -42,24 +41,19 @@ namespace TourPlanner
             AppDbContext _context = new AppDbContext(optionsBuilder.Options);
             _context.Database.Migrate();
             _context.EnsureDatabase();
-            _dbManager = new DatabaseManager(connectionString);
+            DatabaseManager _dbManager = new DatabaseManager(connectionString);
             ITourRepo tourRepo = new TourRepo(connectionString);
             ITourLogRepo tourLogRepo = new TourLogsRepo(_context);
 
             ITourService tourService = new TourService(tourRepo);
             ITourLogService tourLogService = new TourLogService(tourLogRepo);
             InitializeComponent();
-            ToursView.TourSelected += ToursView_TourSelected;
-            this.DataContext = new MainWindowViewModel(tourService, tourLogService, _dbManager, new AddTourViewModel());
+            this.DataContext = new MainWindowViewModel(tourService, tourLogService);
 
             log.Info("Application is starting.");
         }
 
 
-        private void ToursView_TourSelected(object sender, TourSelectedEventArgs e)
-        {
-            var viewModel = (MainWindowViewModel)DataContext;
-            viewModel.SelectedTourLog(e.TourId);
-        }
+
     }
 }

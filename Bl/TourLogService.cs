@@ -40,5 +40,10 @@ namespace Bl
         {
             throw new NotImplementedException();
         }
+
+        public void UpdateLogId(Guid oldTourId, Guid tourId)
+        {
+            _tourLogRepo.UpdateLogId(oldTourId, tourId);
+        }
     }
 }

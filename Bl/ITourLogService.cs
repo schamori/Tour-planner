@@ -15,6 +15,7 @@ namespace Bl
 
         TourLog? GetLog(Guid id);
         void DeleteTour(Guid tourId);
+        void UpdateLogId(Guid oldTourId, Guid tourId);
         void ModifyTour();
     }
 }

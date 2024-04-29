@@ -16,6 +16,7 @@ namespace DAL
         private const string AddCommand = @"INSERT INTO tourlogs (tlog_id, tlog_comment, tlog_creationTime, tlog_difficulty, tlog_totaltime, tlog_distance, tlog_rating, t_id) VALUES ((@tlog_id), (@tlog_comment), (@tlog_creationTime), (@tlog_difficulty), (@tlog_totaltime) ,(@tlog_distance), (@tlog_rating), (@t_id));";
         private const string GetTourLogsCommand = @"SELECT * FROM tourlogs WHERE t_id = @t_id;";
         private const string GetSingleLogCommand = @"SELECT * FROM tourlogs WHERE tlog_id = @tlog_id;";
+        private const string UpdateCommand = @"UPDATE tourlogs SET t_id = @t_idnew WHERE t_id = @t_idold; ";
 
         private readonly AppDbContext _context;
 
@@ -60,6 +61,20 @@ namespace DAL
         public TourLog? GetSingleLog(Guid id)
         {
             return _context.TourLogs.Find(id);
+        }
+
+        public void UpdateLogId(Guid oldTourId, Guid tourId)
+        {
+             /* using var connection = new NpgsqlConnection(_connectionString);
+            connection.Open();
+
+            using var cmd = new NpgsqlCommand(UpdateCommand, connection);
+
+            cmd.Parameters.AddWithValue("t_idold", oldTourId);
+            cmd.Parameters.AddWithValue("t_idnew", tourId);
+
+            cmd.Prepare();
+            int res = cmd.ExecuteNonQuery(); */
         }
 
         public void UpdateTourLog()
