@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace DAL
 {
@@ -16,31 +17,16 @@ namespace DAL
         private const string GetTourLogsCommand = @"SELECT * FROM tourlogs WHERE t_id = @t_id;";
         private const string GetSingleLogCommand = @"SELECT * FROM tourlogs WHERE tlog_id = @tlog_id;";
 
-        private readonly string _connectionString;
+        private readonly AppDbContext _context;
 
-        public TourLogsRepo(string connectionString)
+        public TourLogsRepo(AppDbContext context)
         {
-            _connectionString = connectionString;
-            EnsureTables();
+            _context = context;
         }
         public void AddTourLog(TourLog obj)
         {
-            using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-
-            using var cmd = new NpgsqlCommand(AddCommand, connection);
-
-            cmd.Parameters.AddWithValue("tlog_id", obj.Id);
-            cmd.Parameters.AddWithValue("tlog_comment", obj.Comment);
-            cmd.Parameters.AddWithValue("tlog_creationTime", obj.Date);
-            cmd.Parameters.AddWithValue("tlog_difficulty", obj.Difficulty);
-            cmd.Parameters.AddWithValue("tlog_totaltime", obj.TotalTime);
-            cmd.Parameters.AddWithValue("tlog_distance", obj.TotalDistance);
-            cmd.Parameters.AddWithValue("tlog_rating", obj.Rating);
-            cmd.Parameters.AddWithValue("t_id", obj.TourId);
-
-            cmd.Prepare();
-            int res = cmd.ExecuteNonQuery();
+            _context.TourLogs.Add(obj);
+            _context.SaveChanges();
         }
 
         public void DeleteTour()
@@ -50,83 +36,36 @@ namespace DAL
 
         public void DeleteTourLog(Guid logId)
         {
-            using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-            using var cmd = new NpgsqlCommand(DeleteTourCommand, connection);
-
-            cmd.Parameters.AddWithValue("tlog_id", logId);
-
-            cmd.Prepare();
-            int res = cmd.ExecuteNonQuery();
+            var tourLog = _context.TourLogs.Find(logId);
+            if (tourLog != null)
+            {
+                _context.TourLogs.Remove(tourLog);
+                _context.SaveChanges();
+            }
+            else
+            {
+                throw new InvalidOperationException("Tour log not found");
+            }
 
         }
 
         public List<TourLog> GetAllTourLogsForTour(Guid tourId)
         {
-            using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-
-            using var cmd = new NpgsqlCommand(GetTourLogsCommand, connection);
-            List<TourLog> tours = new();
-            cmd.Parameters.AddWithValue("t_id", tourId);
-            using (var reader = cmd.ExecuteReader())
-            {
-                while (reader.Read())
-                {
-                    tours.Add(new TourLog(
-                        reader.GetGuid(reader.GetOrdinal("tlog_id")),
-                        reader.GetDateTime(reader.GetOrdinal("tlog_creationTime")),
-                        reader.GetString(reader.GetOrdinal("tlog_comment")),
-                        reader.GetString(reader.GetOrdinal("tlog_difficulty")),
-                        reader.GetDouble(reader.GetOrdinal("tlog_distance")),
-                        reader.GetInt32(reader.GetOrdinal("tlog_totaltime")),
-                        reader.GetString(reader.GetOrdinal("tlog_rating")),
-                        reader.GetGuid(reader.GetOrdinal("t_id"))
-                        ));
-                }
-                return tours;
-            }
+            return _context.TourLogs
+                       .Where(t => t.TourId == tourId)
+                       .ToList();
         }
 
-        public TourLog GetSingleLog(Guid id)
-        {
-            using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
 
-            using var cmd = new NpgsqlCommand(GetSingleLogCommand, connection);
-            cmd.Parameters.AddWithValue("tlog_id", id);
-            cmd.Prepare();
-            var reader = cmd.ExecuteReader();
-            if (!reader.Read())
-            {
-                return null;
-            }
-            return new TourLog(
-                        reader.GetGuid(reader.GetOrdinal("tlog_id")),
-                        reader.GetDateTime(reader.GetOrdinal("tlog_creationTime")),
-                        reader.GetString(reader.GetOrdinal("tlog_comment")),
-                        reader.GetString(reader.GetOrdinal("tlog_difficulty")),
-                        reader.GetDouble(reader.GetOrdinal("tlog_distance")),
-                        reader.GetInt32(reader.GetOrdinal("tlog_totaltime")),
-                        reader.GetString(reader.GetOrdinal("tlog_rating")),
-                        reader.GetGuid(reader.GetOrdinal("t_id"))
-                        );
+        public TourLog? GetSingleLog(Guid id)
+        {
+            return _context.TourLogs.Find(id);
         }
 
         public void UpdateTourLog()
         {
             throw new NotImplementedException();
         }
-
-        private void EnsureTables()
-        {
-            // TODO: handle exceptions
-            using var connection = new NpgsqlConnection(_connectionString);
-            connection.Open();
-            using var cmd = new NpgsqlCommand(CreateTourTableCommand, connection);
-
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-        }
     }
+
 }

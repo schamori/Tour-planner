@@ -14,10 +14,8 @@
         <!-- Main Content Area -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <!-- Für Tours und AddTour -->
-                <ColumnDefinition Width="*"/>
-                <!-- Für Map und TourLogs -->
+                <ColumnDefinition Width="200" MinWidth="150"/>
+                <ColumnDefinition Width="*" MinWidth="250"/>
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar für Navigation bleibt wie vorher -->

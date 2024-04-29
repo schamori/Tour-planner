@@ -12,7 +12,7 @@ namespace DAL
         void AddTourLog(TourLog obj);
         List<TourLog> GetAllTourLogsForTour(Guid id);
         void DeleteTourLog(Guid id);
-        TourLog GetSingleLog(Guid id);
+        TourLog? GetSingleLog(Guid id);
         void UpdateTourLog();
     }
 }

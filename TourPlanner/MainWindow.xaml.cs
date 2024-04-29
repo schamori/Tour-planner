@@ -18,6 +18,8 @@ using Bl;
 using DAL;
 using log4net;
 using TourPlanner.Views;
+using Microsoft.EntityFrameworkCore;
+
 
 namespace TourPlanner
 {
@@ -34,10 +36,15 @@ namespace TourPlanner
         public MainWindow()
         {
             var connectionString = "Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin";
+            var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+            optionsBuilder.UseNpgsql(connectionString);
 
+            AppDbContext _context = new AppDbContext(optionsBuilder.Options);
+            _context.Database.Migrate();
+            _context.EnsureDatabase();
             _dbManager = new DatabaseManager(connectionString);
             ITourRepo tourRepo = new TourRepo(connectionString);
-            ITourLogRepo tourLogRepo = new TourLogsRepo(connectionString);
+            ITourLogRepo tourLogRepo = new TourLogsRepo(_context);
 
             ITourService tourService = new TourService(tourRepo);
             ITourLogService tourLogService = new TourLogService(tourLogRepo);

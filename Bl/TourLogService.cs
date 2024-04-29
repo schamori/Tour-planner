@@ -17,7 +17,7 @@ namespace Bl
         }
         public void AddTourLog(string comment, string difficulty, double totalDistance, int totalTime, string rating, Guid id)
         {
-            TourLog tourLog = new TourLog(comment, difficulty, totalDistance, totalTime, rating, id);
+            TourLog tourLog = new TourLog (Guid.NewGuid(), DateTime.Now, comment, difficulty, totalDistance, totalTime, rating, id);
             _tourLogRepo.AddTourLog(tourLog);
         }
 

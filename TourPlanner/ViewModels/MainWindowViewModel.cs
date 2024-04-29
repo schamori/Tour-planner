@@ -347,6 +347,9 @@ namespace TourPlanner.ViewModels
 
             _tourService.DeleteTour(tour!.Name);
             LoadAllTours();
+            List<TourLog> tourLogs = _tourLogService.GetAllTourLogsForTour(tour!.Id);
+
+            tourLogs.ForEach(tourLog => _tourLogService.DeleteTour(tourLog.Id));
         }
 
         private void ModifyAction(object parameter)
