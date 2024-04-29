@@ -14,14 +14,12 @@ namespace DAL
             _context = context;
         }
 
-        // Add a Tour
         public void Add(Route obj)
         {
             _context.Routes.Add(obj);
             _context.SaveChanges();
         }
 
-        // Delete a Tour by name
         public void DeleteTour(string tourName)
         {
             var tour = _context.Routes.FirstOrDefault(t => t.Name == tourName);
@@ -32,25 +30,21 @@ namespace DAL
             }
         }
 
-        // Get all Tours
         public List<Route> GetAllTours()
         {
             return _context.Routes.ToList();
         }
 
-        // Get a Tour by name
         public Route? GetTour(string tourName)
         {
             return _context.Routes.FirstOrDefault(t => t.Name == tourName);
         }
 
-        // Get a Tour by ID
         public Route? GetTourById(Guid tourId)
         {
             return _context.Routes.FirstOrDefault(t => t.Id == tourId);
         }
 
-        // Update a Tour
         public void UpdateTour(Route obj)
         {
             var tour = _context.Routes.FirstOrDefault(t => t.Id == obj.Id);
