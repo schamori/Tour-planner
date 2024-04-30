@@ -148,8 +148,63 @@ namespace TourPlanner.ViewModels
             _mainViewModel.TourDetailsVisibility = Visibility.Visible;
             _mainViewModel.MapVisibility = Visibility.Visible;
             SelectedRoute = _mainViewModel._tourService.GetTourById(tourId)!;
+            // Calculate Stats
+            Popularity = SelectedRoute.TourLogs?.Count ?? 0;
+
+            var averageDifficulty = allTourLogs.Average(log => DifficultyToDouble(log.Difficulty));
+            var averageTime = allTourLogs.Average(log => log.TotalTime);
+            var averageDistance = allTourLogs.Average(log => log.TotalDistance);
+
+            ChildFriendliness = CalculateChildFriendliness(averageDifficulty, averageTime, averageDistance); 
+
         }
 
+        public double DifficultyToDouble(string difficulty)
+        {
+            switch (difficulty.ToUpper())
+            {
+                case "EASY":
+                    return 1.0;
+                case "MEDIUM":
+                    return 2.0;
+                case "HARD":
+                    return 3.0;
+                default:
+                    throw new ArgumentException("Invalid difficulty level");
+            }
+        }
+
+        private bool CalculateChildFriendliness(double difficulty, double totalTime, double distance)
+        {
+            return difficulty * 10 + totalTime / 30 + distance / 5 < 50;
+        }
+
+
+        // --- Stats ----
+
+        private int _popularity;
+        public int Popularity
+        {
+            get => _popularity;
+            set
+            {
+                _popularity = value;
+                OnPropertyChanged(nameof(Popularity));
+            }
+        }
+
+        private bool _childFriendliness;
+        public bool ChildFriendliness
+        {
+            get => _childFriendliness;
+            set
+            {
+                _childFriendliness = value;
+                OnPropertyChanged(nameof(ChildFriendliness));
+            }
+        }
+
+
     }
-    
+
 }

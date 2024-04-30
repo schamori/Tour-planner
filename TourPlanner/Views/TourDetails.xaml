@@ -49,7 +49,12 @@
 
                 <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
         <Run Text="Popularity: "/>
-<Run FontWeight="Normal" Text="{Binding SelectedRoute.TourLogs.Count, Mode=OneWay}"/>
+<Run FontWeight="Normal" Text="{Binding Popularity}"/>
+                </TextBlock>
+
+                <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
+        <Run Text="Child Friendliness: "/>
+<Run FontWeight="Normal" Text="{Binding ChildFriendliness}"/>
                 </TextBlock>
             </StackPanel>
         </ScrollViewer>
