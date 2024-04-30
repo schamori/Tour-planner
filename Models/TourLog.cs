@@ -40,6 +40,8 @@ namespace Models
 
         public Guid TourId { get; set; }
 
+        public Route Route { get; set; }
+
         public TourLog(Guid id, DateTime date, string comment, string difficulty, double totalDistance, int totalTime, string rating, Guid tourId)
         {
             Id = id;

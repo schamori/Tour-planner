@@ -16,7 +16,8 @@ public class AppDbContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin;Include Error Detail=True;");
+
         }
 
     }
@@ -30,9 +31,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Route>().ToTable("Routes");
         modelBuilder.Entity<Route>().HasKey(t => t.Id);
 
-
-
-
+        modelBuilder.Entity<TourLog>()
+        .HasOne(t => t.Route)
+        .WithMany(r => r.TourLogs)
+        .HasForeignKey(t => t.TourId);
     }
     public void EnsureDatabase()
     {
