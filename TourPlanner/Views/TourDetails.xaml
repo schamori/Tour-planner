@@ -46,6 +46,11 @@
         <Run Text="Total Votes: "/>
         <Run FontWeight="Normal" Text="{Binding SelectedRoute.TotalVotes}"/>
                 </TextBlock>
+
+                <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
+        <Run Text="Popularity: "/>
+<Run FontWeight="Normal" Text="{Binding SelectedRoute.TourLogs.Count, Mode=OneWay}"/>
+                </TextBlock>
             </StackPanel>
         </ScrollViewer>
 

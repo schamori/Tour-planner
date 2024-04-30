@@ -20,7 +20,13 @@ namespace Models
         public string TransportType { get; set; }
         public double Distance { get; set; }
         public int EstimatedTime { get; set; }
+
+
+        public int Popularity { get; set; }
+
+
         private DateTime _date;
+        public ICollection<TourLog> TourLogs { get; set; }
 
         public DateTime CreationDate
         {
@@ -39,6 +45,7 @@ namespace Models
             Distance = distance;
             EstimatedTime = estimatedTime;
             CreationDate = creationDate;
+            Popularity = TourLogs?.Count ?? 0;
         }
 
 
