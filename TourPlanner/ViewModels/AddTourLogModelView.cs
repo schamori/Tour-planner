@@ -175,6 +175,7 @@ namespace TourPlanner.ViewModels
                     _mainViewModel._tourLogService.AddTourLog(Comment, Difficulty, distance, time, Rating, _mainViewModel.TourVM.SelectedRoute.Id);
                 }
                 // refresh
+
                 _mainViewModel.TourVM.SelectTour(_mainViewModel.TourVM.SelectedRoute.Id);
 
                 _mainViewModel.LogVisibility = Visibility.Visible;
