@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -51,11 +52,46 @@ namespace TourPlanner.ViewModels
             }
 
         }
+
+        private ObservableCollection<Tour> _filteredTours;
+        public ObservableCollection<Tour> FilteredTours
+        {
+            get => _filteredTours;
+            set
+            {
+                _filteredTours = value;
+                OnPropertyChanged(nameof(FilteredTours));
+            }
+        }
+
+        private string _tourSearchText = "";
+        public string TourSearchText
+        {
+            get => _tourSearchText;
+            set
+            {
+                if (_tourSearchText != value)
+                {
+                    _tourSearchText = value;
+                    OnPropertyChanged(nameof(TourSearchText));
+                }
+            }
+        }
+
+        public void SearchTours()
+        {
+            LoadAllTours();
+            var lowerCaseSearchText = TourSearchText.ToLower();
+            Tours = new ObservableCollection<Tour>(Tours.Where(tour =>
+                tour.Name.ToLower().Contains(lowerCaseSearchText)));
+        }
+
         public ICommand DeleteCommand { get; private set; }
 
         public ICommand GotToAddCommand { get; set; }
 
         public ICommand ModifyCommand { get; set; }
+        public ICommand SearchToursCommand { get; set; }
 
 
         public TourViewModel(MainWindowViewModel mainViewModel)
@@ -68,6 +104,10 @@ namespace TourPlanner.ViewModels
             });
             DeleteCommand = new RelayCommand(ExecuteDeleteTour);
             ModifyCommand = new RelayCommand(ModifyAction);
+            SearchToursCommand = new RelayCommand(o =>
+            {
+                SearchTours();
+            });
         }
 
         public void LoadAllTours()
