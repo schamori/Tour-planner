@@ -16,8 +16,6 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="200*" MinWidth="150"/>
                 <ColumnDefinition Width="600*" MinWidth="250"/>
-                <ColumnDefinition Width="200" MinWidth="150"/>
-                <ColumnDefinition Width="*" MinWidth="250"/>
             </Grid.ColumnDefinitions>
 
             <!-- Sidebar für Navigation bleibt wie vorher -->
@@ -44,7 +42,8 @@
                 </Grid.RowDefinitions>
 
                 <!-- Map Display Area -->
-                <local:Map x:Name="Map" Grid.Row="0" Margin="-66,-83,300,120" RenderTransformOrigin="0.5,0.5">
+                <local:Map Visibility="{Binding DataContext.MapVisibility, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" DataContext="{Binding MapVM}"
+                           x:Name="Map" Grid.Row="0" Margin="-66,-83,300,120" RenderTransformOrigin="0.5,0.5">
                     <local:Map.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>

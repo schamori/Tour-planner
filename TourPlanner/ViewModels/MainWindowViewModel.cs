@@ -19,6 +19,7 @@ namespace TourPlanner.ViewModels
     public class MainWindowViewModel: ViewModelBase
     {
         private Visibility _toursVisibility = Visibility.Visible;
+        private Visibility _mapVisibility = Visibility.Hidden;
         private Visibility _addTourVisibility = Visibility.Hidden;
         private Visibility _logVisibility = Visibility.Visible;
         private Visibility _addLogVisibility = Visibility.Hidden;
@@ -34,14 +35,18 @@ namespace TourPlanner.ViewModels
         public TourLogsViewModel TourLogsVM { get; private set; }
         public TourViewModel TourVM { get; private set; }
         public AddTourLogModelView AddTourLogsVM  { get; private set; }
+        public MapViewModel MapVM { get; private set; }
         public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService)
         {
             AddTourVM = new AddTourViewModel(this);
             TourLogsVM = new TourLogsViewModel(this);
             TourVM = new TourViewModel(this);
             AddTourLogsVM = new AddTourLogModelView(this);
+            MapVM = new MapViewModel();
             _tourService = tourService;
             _tourLogService = tourLogService;
+
+            TourVM.TourSelected += MapVM.LoadMapImage;  // Subscribe to the TourSelected event
 
             TourVM.LoadAllTours();
 
@@ -64,6 +69,17 @@ namespace TourPlanner.ViewModels
                 OnPropertyChanged(nameof(ToursVisibility));
             }
         }
+
+        public Visibility MapVisibility
+        {
+            get => _mapVisibility;
+            set
+            {
+                _mapVisibility = value;
+                OnPropertyChanged(nameof(MapVisibility));
+            }
+        }
+
         public Visibility AddTourVisibility
         {
             get => _addTourVisibility;

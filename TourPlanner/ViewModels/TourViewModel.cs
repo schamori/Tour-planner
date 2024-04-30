@@ -35,7 +35,7 @@ namespace TourPlanner.ViewModels
                 }
             }
         }
-
+        public event Action<Guid> TourSelected;
         private Route _selectedroute;
         public Route SelectedRoute
         {
@@ -46,6 +46,7 @@ namespace TourPlanner.ViewModels
                 {
                     _selectedroute = value;
                     OnPropertyChanged(nameof(SelectedRoute));
+                    TourSelected?.Invoke(_selectedroute.Id);
                 }
             }
 
@@ -105,6 +106,7 @@ namespace TourPlanner.ViewModels
             _mainViewModel.TourLogsVM.SelectedTourLogs = new ObservableCollection<TourLog>(allTourLogs);
             _mainViewModel.AddLogButtonVisibility = Visibility.Visible;
             _mainViewModel.TourDetailsVisibility = Visibility.Visible;
+            _mainViewModel.MapVisibility = Visibility.Visible;
             SelectedRoute = _mainViewModel._tourService.GetTourById(tourId)!;
         }
 

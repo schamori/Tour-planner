@@ -4,11 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TourPlanner.Views"
+             xmlns:viewmodels="clr-namespace:TourPlanner.ViewModels" d:DataContext="{d:DesignInstance Type=viewmodels:MapViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Border Grid.Column="2" Margin="5,5,5,5" Background="#FFE5CC">
-            <!-- Placeholder for Map, could be an Image or a Map Control -->
-        </Border>
+        <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
+        <Run Text="From: "/>
+        <Run FontWeight="Normal" Text="{Binding MapImageUrl}"/>
+        </TextBlock>
+        <Image Source="{Binding MapImageUrl}" Stretch="Fill" Loaded="Image_OnLoaded" ImageFailed="Image_OnFailed"/>
+        
     </Grid>
 </UserControl>

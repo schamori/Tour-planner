@@ -42,32 +42,15 @@ namespace Bl
             var distance = (double)summary["distance"];
             var duration = (int)summary["duration"];
 
-            // Logik, um das Bild der Route zu bekommen, würde hier folgen
-            var startTile = GetTileUrl(startLat, startLng, 10);
-            var endTile = GetTileUrl(endLat, endLng, 10);
-
             Route newRoute = new Route(Guid.NewGuid(), name, description, startAddress, endAddress, transportType, distance, duration, DateTime.Now);
+
+            // Logik, um das Bild der Route zu bekommen, würde hier folgen
+            var startTile = _orsClient.DownloadTileImage(startLat, startLng, 17, newRoute.Id);
+            var endTile = _orsClient.DownloadTileImage(endLat, endLng, 17, newRoute.Id);
             return newRoute;
             // Erstelle eine Route-Instanz und fülle sie mit den Daten
         }
 
-        public static (int x, int y) LatLongToTileXY(double latitude, double longitude, int zoom)
-        {
-            double latRad = latitude * Math.PI / 180;
-            double n = Math.Pow(2, zoom);
-            int x = (int)((longitude + 180.0) / 360.0 * n);
-            int y = (int)((1.0 - Math.Log(Math.Tan(latRad) + 1.0 / Math.Cos(latRad)) / Math.PI) / 2.0 * n);
-
-            return (x, y);
-        }
-
-        public static string GetTileUrl(double latitude, double longitude, int zoom)
-        {
-            var tileXY = LatLongToTileXY(latitude, longitude, zoom);
-            return $"https://tile.openstreetmap.org/{zoom}/{tileXY.x}/{tileXY.y}.png";
-        }
-
-        
     }
 
 }

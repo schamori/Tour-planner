@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using TourPlanner.ViewModels;
 
 namespace TourPlanner.Views
 {
@@ -24,5 +25,16 @@ namespace TourPlanner.Views
         {
             InitializeComponent();
         }
+
+        private void Image_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            Console.WriteLine("Bild erfolgreich geladen.");
+        }
+
+        private void Image_OnFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            Console.WriteLine("Fehler beim Laden des Bildes: " + e.ErrorException.Message);
+        }
     }
+
 }
