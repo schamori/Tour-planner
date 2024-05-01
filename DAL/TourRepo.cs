@@ -48,19 +48,19 @@ namespace DAL
         public void UpdateTour(Route obj)
         {
             var tour = _context.Routes.FirstOrDefault(t => t.Id == obj.Id);
-            if (tour != null)
-            {
-                tour.Name = obj.Name;
-                tour.Description = obj.Description;
-                tour.Distance = obj.Distance;
-                tour.CreationDate = obj.CreationDate;
-                tour.EstimatedTime = obj.EstimatedTime;
-                tour.StartAddress = obj.StartAddress;
-                tour.EndAddress = obj.EndAddress;
-                tour.TransportType = obj.TransportType;
+            if (tour == null)
+                throw new RouteNotFoundException();
 
-                _context.SaveChanges();
-            }
+            tour.Name = obj.Name;
+            tour.Description = obj.Description;
+            tour.Distance = obj.Distance;
+            tour.CreationDate = obj.CreationDate;
+            tour.EstimatedTime = obj.EstimatedTime;
+            tour.StartAddress = obj.StartAddress;
+            tour.EndAddress = obj.EndAddress;
+            tour.TransportType = obj.TransportType;
+
+            _context.SaveChanges();
         }
     }
 }

@@ -142,20 +142,25 @@ namespace TourPlanner.ViewModels
         }
         public void SelectTour(Guid tourId)
         {
-            List<TourLog> allTourLogs = _mainViewModel._tourLogService.GetAllTourLogsForTour(tourId);
-            _mainViewModel.TourLogsVM.SelectedTourLogs = new ObservableCollection<TourLog>(allTourLogs);
+            SelectedRoute = _mainViewModel._tourService.GetTourById(tourId)!;
             _mainViewModel.AddLogButtonVisibility = Visibility.Visible;
             _mainViewModel.TourDetailsVisibility = Visibility.Visible;
             _mainViewModel.MapVisibility = Visibility.Visible;
-            SelectedRoute = _mainViewModel._tourService.GetTourById(tourId)!;
             // Calculate Stats
             Popularity = SelectedRoute.TourLogs?.Count ?? 0;
+            
+            if (SelectedRoute.TourLogs != null) {
+                _mainViewModel.TourLogsVM.SelectedTourLogs = new ObservableCollection<TourLog>(SelectedRoute.TourLogs);
+                var averageDifficulty = SelectedRoute.TourLogs.Average(log => DifficultyToDouble(log.Difficulty));
+                var averageTime = SelectedRoute.TourLogs.Average(log => log.TotalTime);
+                var averageDistance = SelectedRoute.TourLogs.Average(log => log.TotalDistance);
 
-            var averageDifficulty = allTourLogs.Average(log => DifficultyToDouble(log.Difficulty));
-            var averageTime = allTourLogs.Average(log => log.TotalTime);
-            var averageDistance = allTourLogs.Average(log => log.TotalDistance);
-
-            ChildFriendliness = CalculateChildFriendliness(averageDifficulty, averageTime, averageDistance); 
+                ChildFriendliness = CalculateChildFriendliness(averageDifficulty, averageTime, averageDistance);
+            } else
+            {
+                _mainViewModel.TourLogsVM.SelectedTourLogs = new ObservableCollection<TourLog>();
+                ChildFriendliness = null;
+            }
 
         }
 
@@ -193,8 +198,8 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        private bool _childFriendliness;
-        public bool ChildFriendliness
+        private bool? _childFriendliness;
+        public bool? ChildFriendliness
         {
             get => _childFriendliness;
             set

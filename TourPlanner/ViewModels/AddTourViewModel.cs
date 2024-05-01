@@ -139,7 +139,7 @@ namespace TourPlanner.ViewModels
             GoBackCommand = new RelayCommand(o => { ExecuteGoBack(); });
         }
 
-        private async void CreateNewTour(bool update, Guid oldTourId)
+        private async void CreateNewTour(bool update)
         {
             var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
             Route route;
@@ -169,20 +169,15 @@ namespace TourPlanner.ViewModels
 
                 return;
             }
-            _mainViewModel._tourService.AddTour(route);
+            if (update)
+            {
+                route.Id = Id;
+            }
+
+            _mainViewModel._tourService.AddTour(route, update);
             _mainViewModel.ToursVisibility = Visibility.Visible;
             _mainViewModel.AddTourVisibility = Visibility.Hidden;
-            ErrorMessage = "";
-            Name = "";
-            Description = "";
-            From = "";
-            To = "";
-            TransportType = "";
             ExecuteGoBack();
-            if(update == true)
-            {
-                _mainViewModel._tourLogService.UpdateLogId(oldTourId, route.Id);
-            }
             _mainViewModel.TourVM.LoadAllTours();
             IsCommandExecuting = false;
 
@@ -194,7 +189,6 @@ namespace TourPlanner.ViewModels
             bool update = false;
             if (nameToModify != "")
             {
-                _mainViewModel._tourService.DeleteTour(nameToModify);
                 update = true;
                 IsCommandExecuting = false;
 
@@ -205,7 +199,7 @@ namespace TourPlanner.ViewModels
                 IsCommandExecuting = false;
 
             }
-            else if (_mainViewModel._tourService.GetTour(Name) != null)
+            else if (!update && _mainViewModel._tourService.GetTour(Name) != null)
             {
                 ErrorMessage = "Name already taken";
                 IsCommandExecuting = false;
@@ -233,11 +227,10 @@ namespace TourPlanner.ViewModels
             {
                 ErrorMessage = "TransportType not set";
                 IsCommandExecuting = false;
-
             }
             else
             {
-                CreateNewTour(update, Id);
+                CreateNewTour(update);
             }
         }
 
@@ -256,13 +249,8 @@ namespace TourPlanner.ViewModels
             From = string.Empty;
             To = string.Empty;
             ErrorMessage = string.Empty;
-            // Notify the UI that all properties have been reset
-            OnPropertyChanged(nameof(Name));
-            OnPropertyChanged(nameof(Description));
-            OnPropertyChanged(nameof(TransportType));
-            OnPropertyChanged(nameof(From));
-            OnPropertyChanged(nameof(To));
-            OnPropertyChanged(nameof(ErrorMessage));
+            nameToModify = string.Empty;
+
         }
     }
 }

@@ -59,7 +59,8 @@ namespace DAL
             var tour = _context.Routes.FirstOrDefault(t => t.Id == oldTourId);
             if (tour != null)
             {
-                tour.Id = tourId;
+
+
                 _context.SaveChanges();
             }
         }
