@@ -34,6 +34,8 @@ namespace TourPlanner
         private static readonly ILog log = LogManager.GetLogger(typeof(MainWindow));
         public MainWindow()
         {
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+
             var connectionString = "Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin";
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseNpgsql(connectionString);

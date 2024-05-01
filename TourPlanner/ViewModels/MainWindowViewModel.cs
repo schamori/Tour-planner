@@ -25,6 +25,7 @@ namespace TourPlanner.ViewModels
         private Visibility _addLogVisibility = Visibility.Hidden;
         private Visibility _tourDetailsVisibility = Visibility.Hidden;
         private Visibility _addLogButtonVisibility = Visibility.Collapsed;
+        private Visibility _dropDownVisibility = Visibility.Hidden;
 
 
         public ITourService _tourService;
@@ -36,12 +37,14 @@ namespace TourPlanner.ViewModels
         public TourViewModel TourVM { get; private set; }
         public AddTourLogModelView AddTourLogsVM  { get; private set; }
         public MapViewModel MapVM { get; private set; }
+        public DropdownModelView DropDownVM { get; private set; }
         public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService)
         {
             AddTourVM = new AddTourViewModel(this);
             TourLogsVM = new TourLogsViewModel(this);
             TourVM = new TourViewModel(this);
             AddTourLogsVM = new AddTourLogModelView(this);
+            DropDownVM = new DropdownModelView(this);
             MapVM = new MapViewModel();
             _tourService = tourService;
             _tourLogService = tourLogService;
@@ -120,6 +123,16 @@ namespace TourPlanner.ViewModels
             {
                 _addLogVisibility = value;
                 OnPropertyChanged(nameof(AddLogVisibility));
+            }
+        }
+
+        public Visibility DropDownVisibility
+        {
+            get => _dropDownVisibility;
+            set
+            {
+                _dropDownVisibility = value;
+                OnPropertyChanged(nameof(DropDownVisibility));
             }
         }
     }

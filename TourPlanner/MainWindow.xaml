@@ -9,7 +9,7 @@
         Title="Tour Planner" Height="800" Width="1000">
     <Grid>
         <!-- Menu Bar -->
-        <local:Navbar x:Name="Navbar" />
+        <local:DropDown DataContext="{Binding DropDownVM}" x:Name="DropDown" />
 
         <!-- Main Content Area --> 
         <Grid>

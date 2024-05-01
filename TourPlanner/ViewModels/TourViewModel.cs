@@ -13,6 +13,11 @@ using DAL;
 using log4net;
 using Models;
 using TourPlanner.Views;
+using Microsoft.Win32;
+using System.Windows;
+using PdfSharp.Pdf;
+using PdfSharp.Drawing;
+using System.Windows;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace TourPlanner.ViewModels
@@ -93,6 +98,8 @@ namespace TourPlanner.ViewModels
         public ICommand ModifyCommand { get; set; }
         public ICommand SearchToursCommand { get; set; }
 
+        public ICommand TourReportCommand { get; set; }
+
 
         public TourViewModel(MainWindowViewModel mainViewModel)
         {
@@ -108,6 +115,92 @@ namespace TourPlanner.ViewModels
             {
                 SearchTours();
             });
+
+            TourReportCommand = new RelayCommand(o => { ExecuteTourReportCommand(); });
+
+
+        }
+
+        public void CreateTourReportPdf(Route tour, string filePath)
+        {
+            PdfDocument document = new PdfDocument();
+            document.Info.Title = "Tour Report";
+
+            PdfPage page = document.AddPage();
+            XGraphics gfx = XGraphics.FromPdfPage(page);
+            XFont titleFont = new XFont("Arial", 12, XFontStyle.BoldItalic);
+            XFont font = new XFont("Arial", 10, XFontStyle.Regular);
+
+            gfx.DrawString("Tour Report", titleFont, XBrushes.Black, new XRect(0, 20, page.Width, page.Height), XStringFormats.TopCenter);
+
+            gfx.DrawString("Tours", titleFont, XBrushes.Black, new XRect(20, 40, page.Width, page.Height), XStringFormats.TopLeft);
+
+            int yPoint = 60;
+
+            // Print Tour Details
+            gfx.DrawString($"Tour Name: {tour.Name}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+            gfx.DrawString($"Description: {tour.Description}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+            gfx.DrawString($"Start Address: {tour.StartAddress}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+            gfx.DrawString($"End Address: {tour.EndAddress}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+            gfx.DrawString($"Transport Type: {tour.TransportType}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+            gfx.DrawString($"Distance: {tour.Distance} km", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+            gfx.DrawString($"Estimated Time: {tour.EstimatedTime} minutes", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+            gfx.DrawString($"Creation Date: {tour.CreationDate.ToShortDateString()}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+
+            
+            gfx.DrawString( $"Popularity: {Popularity}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            yPoint += 20;
+
+            gfx.DrawString($"ChildFriendliness: {ChildFriendliness}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+
+            yPoint += 40;
+
+            gfx.DrawString("Tour Logs", titleFont, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+
+            yPoint += 20;
+
+            // Print Tour Logs
+            if (tour.TourLogs != null && tour.TourLogs.Count > 0)
+            {
+                foreach (var log in tour.TourLogs)
+                {
+                    yPoint += 20;
+                    gfx.DrawString($"Date: {log.Date.ToShortDateString()} - Comment: {log.Comment} - Difficulty: {log.Difficulty} - Distance: {log.TotalDistance} km - Time: {log.TotalTime} minutes - Rating: {log.Rating}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+                }
+            }
+            else
+            {
+                gfx.DrawString("No tour logs available.", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            }
+
+            // Save the document
+            document.Save(filePath);
+            MessageBox.Show("Tour report has been saved successfully.");
+        }
+        private void ExecuteTourReportCommand()
+        {
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                try
+                {
+                    CreateTourReportPdf(SelectedRoute, saveFileDialog.FileName);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Failed to save the document: " + ex.Message);
+                }
+            }
         }
 
         public void LoadAllTours()
