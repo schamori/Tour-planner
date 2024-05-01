@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Models
 {
+
     public class Tour
     {
         public string Name { get; set; }

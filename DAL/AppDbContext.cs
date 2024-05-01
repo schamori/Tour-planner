@@ -32,9 +32,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Route>().HasKey(t => t.Id);
 
         modelBuilder.Entity<TourLog>()
-        .HasOne(t => t.Route)
-        .WithMany(r => r.TourLogs)
-        .HasForeignKey(t => t.TourId);
+        .HasOne<Route>() // Specify the principal entity type but not the navigation property
+        .WithMany(r => r.TourLogs) // Specify the collection navigation property in Route
+        .HasForeignKey(t => t.TourId) // Define the foreign key in the dependent entity
+        .OnDelete(DeleteBehavior.Cascade);
     }
     public void EnsureDatabase()
     {

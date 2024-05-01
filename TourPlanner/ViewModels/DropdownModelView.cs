@@ -1,19 +1,14 @@
-﻿using System;
+﻿using Models;
+using PdfSharp.Drawing;
+using PdfSharp.Pdf;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Xml.Linq;
-using Bl;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Collections.Generic;
+using System.IO;
 using DAL;
-using log4net;
-using PdfSharp.Pdf;
-using PdfSharp.Drawing;
-using System.Windows;
-using Models;
 
 namespace TourPlanner.ViewModels
 {
@@ -21,22 +16,87 @@ namespace TourPlanner.ViewModels
     {
         public readonly MainWindowViewModel _mainViewModel;
 
-        public ICommand ImportCommand;
+        public ICommand ImportCommand { get; set; }
 
-        public ICommand ExportCommand;
-        public ICommand TourReportCommand;
+        public ICommand SaveCommand { get; set; }
         public ICommand SummarizeReportCommand { get; set; }
 
 
         private void ExecuteImportCommand()
         {
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
 
+            openFileDialog.Filter = "DAT file (*.dat)|*.dat";
+            if (openFileDialog.ShowDialog() == true)
+            {
+                List<Route>? loadedTours = Deserialize<List<Route>>(openFileDialog.FileName);
+
+                string? responseMessage = null;
+
+                if (loadedTours == null)
+                    responseMessage = "Specified File is empty!";
+                else
+                {
+                    foreach (Route route in loadedTours)
+                    {
+                        try
+                        {
+                            _mainViewModel._tourService.AddTour(route, false);
+                        }
+                        catch (RouteAlreadyExistsException)
+                        {
+                            responseMessage = "Import successfull but some or all Routes already existed";
+                        }
+                    }
+                    // resfresh
+                    _mainViewModel.TourVM.LoadAllTours();
+
+                    MessageBox.Show(responseMessage ?? "Import successfull!");
+                }
+            }
         }
-
-        private void ExecuteExportCommand()
+        
+        private void ExecuteSaveCommand()
         {
-
+            var Tours = _mainViewModel._tourService.GetAllTours();
+            // Let user choose the location to save the PDF
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog();
+            saveFileDialog.Filter = "DAT file (*.dat)|*.dat";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                Serialize(Tours, saveFileDialog.FileName);
+                MessageBox.Show("Tour statistics report has been saved successfully.");
+            }
         }
+        
+        public DropdownModelView(MainWindowViewModel mainViewModel)
+        {
+            _mainViewModel = mainViewModel;
+            ImportCommand = new RelayCommand(o => { ExecuteImportCommand(); });
+            SaveCommand = new RelayCommand(o => { ExecuteSaveCommand(); });
+            SummarizeReportCommand = new RelayCommand(o => { ExecuteSummarizeReportCommand(); });
+        }
+
+        // Serialize an object to a file
+        static void Serialize(object obj, string filePath)
+        {
+            using (FileStream fs = new FileStream(filePath, FileMode.Create))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                formatter.Serialize(fs, obj);
+            }
+        }
+
+        // Deserialize an object from a file
+        static T Deserialize<T>(string filePath)
+        {
+            using (FileStream fs = new FileStream(filePath, FileMode.Open))
+            {
+                BinaryFormatter formatter = new BinaryFormatter();
+                return (T)formatter.Deserialize(fs);
+            }
+        }
+
         public void CreateTourStatsPdf(Dictionary<string, (double averageDifficulty, double averageTime, double averageDistance)> tourData, string filePath)
         {
             PdfDocument document = new PdfDocument();
@@ -85,13 +145,6 @@ namespace TourPlanner.ViewModels
             {
                 CreateTourStatsPdf(tourStats, saveFileDialog.FileName);
             }
-        }
-        public DropdownModelView(MainWindowViewModel mainViewModel)
-        {
-            _mainViewModel = mainViewModel;
-            ImportCommand = new RelayCommand(o => { ExecuteImportCommand(); });
-            ExportCommand = new RelayCommand(o => { ExecuteExportCommand(); });
-            SummarizeReportCommand = new RelayCommand(o => { ExecuteSummarizeReportCommand(); });
         }
 
 

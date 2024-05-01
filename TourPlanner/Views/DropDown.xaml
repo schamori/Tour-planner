@@ -11,8 +11,8 @@
     
     <Menu>
         <MenuItem Header="File" >
-            <MenuItem Header="Import"/>
-            <MenuItem Header="Save"/>
+            <MenuItem Header="Import" Command="{Binding ImportCommand}"/>
+            <MenuItem Header="Save" Command="{Binding SaveCommand}"/>
             <MenuItem Header="Reports">
                 <MenuItem Header="Tour Report"/>
                 <MenuItem Header="Summarize Report" Command="{Binding SummarizeReportCommand}"/>

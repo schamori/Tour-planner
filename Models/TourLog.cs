@@ -8,11 +8,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Models
 {
+    [Serializable]
+
     public class TourLog
     {
 
         [Required]
         public Guid Id { get; set; }
+        [NonSerialized]
+
         private DateTime _date;
 
         [Required]
@@ -40,8 +44,7 @@ namespace Models
 
         public Guid TourId { get; set; }
 
-        public Route Route { get; set; }
-
+       
         public TourLog(Guid id, DateTime date, string comment, string difficulty, double totalDistance, int totalTime, string rating, Guid tourId)
         {
             Id = id;

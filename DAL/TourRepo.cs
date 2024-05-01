@@ -16,6 +16,10 @@ namespace DAL
 
         public void Add(Route obj)
         {
+            var tour = _context.Routes.FirstOrDefault(t => t.Name == obj.Name || t.Id == obj.Id);
+            if (tour != null)
+                throw new RouteAlreadyExistsException();
+
             _context.Routes.Add(obj);
             _context.SaveChanges();
         }
