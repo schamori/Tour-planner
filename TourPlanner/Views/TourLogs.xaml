@@ -67,14 +67,7 @@
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
 
-                <!-- Tour Error Message Column -->
-                <DataGridTemplateColumn Width="*">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding TourErrorMessage}" Foreground="Red" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
+                
 
                 <!-- Actions Column -->
                 <DataGridTemplateColumn Header="Actions" Width="Auto">
