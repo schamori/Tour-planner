@@ -235,6 +235,8 @@ namespace TourPlanner.ViewModels
         }
         public void SelectTour(Guid tourId)
         {
+
+            var test = _mainViewModel._tourLogService.GetAllTourLogsForTour(tourId);
             SelectedRoute = _mainViewModel._tourService.GetTourById(tourId)!;
             _mainViewModel.AddLogButtonVisibility = Visibility.Visible;
             _mainViewModel.TourDetailsVisibility = Visibility.Visible;
