@@ -31,6 +31,7 @@ namespace TourPlanner.ViewModels
         public ITourService _tourService;
         public ITourLogService _tourLogService;
         public IRouteService _routeService;
+        public IExportService _exportService;
         
 
         public AddTourViewModel AddTourVM { get; private set; }
@@ -39,8 +40,9 @@ namespace TourPlanner.ViewModels
         public AddTourLogModelView AddTourLogsVM  { get; private set; }
         public MapViewModel MapVM { get; private set; }
         public DropdownModelView DropDownVM { get; private set; }
-        public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService, IRouteService routeService)
+        public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService, IRouteService routeService, IExportService exportService)
         {
+            _exportService = exportService;
             AddTourVM = new AddTourViewModel(this);
             TourLogsVM = new TourLogsViewModel(this);
             TourVM = new TourViewModel(this);

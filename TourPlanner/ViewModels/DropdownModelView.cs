@@ -98,31 +98,7 @@ namespace TourPlanner.ViewModels
             }
         }
 
-        public void CreateTourStatsPdf(Dictionary<string, (double averageDifficulty, double averageTime, double averageDistance)> tourData, string filePath)
-        {
-            PdfDocument document = new PdfDocument();
-            document.Info.Title = "Tour Statistics Report";
-
-            PdfPage page = document.AddPage();
-            XGraphics gfx = XGraphics.FromPdfPage(page);
-            XFont titleFont = new XFont("Verdana", 14, XFontStyle.Bold);
-            XFont font = new XFont("Verdana", 10, XFontStyle.Regular);
-
-            gfx.DrawString("Tour Statistics Report", titleFont, XBrushes.Black, new XRect(0, 20, page.Width, page.Height), XStringFormats.TopCenter);
-
-            int yPoint = 60;
-
-            foreach (var tour in tourData)
-            {
-                string line = $"Tour Name: {tour.Key}, Average Difficulty: {tour.Value.averageDifficulty}, Average Time: {tour.Value.averageTime} minutes, Average Distance: {tour.Value.averageDistance} km";
-                gfx.DrawString(line, font, XBrushes.Black, new XRect(20, yPoint, page.Width - 40, page.Height), XStringFormats.TopLeft);
-                yPoint += 20;
-            }
-
-            document.Save(filePath);
-            MessageBox.Show("Tour statistics report has been saved successfully.");
-        }
-
+       
         private void ExecuteSummarizeReportCommand()
         {
             Dictionary<string, (double averageDifficulty, double averageTime, double averageDistance)> tourStats = new Dictionary<string, (double averageDifficulty, double averageTime, double averageDistance)>();
@@ -144,7 +120,9 @@ namespace TourPlanner.ViewModels
             saveFileDialog.Filter = "PDF file (*.pdf)|*.pdf";
             if (saveFileDialog.ShowDialog() == true)
             {
-                CreateTourStatsPdf(tourStats, saveFileDialog.FileName);
+                _mainViewModel._exportService.CreateTourStatsPdf(tourStats, saveFileDialog.FileName);
+                MessageBox.Show("Tour statistics report has been saved successfully.");
+
             }
         }
 

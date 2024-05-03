@@ -15,6 +15,7 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.22" />
+    <PackageReference Include="PDFSharp.NetStandard2" Version="1.51.5185.2" />
   </ItemGroup>
 
 </Project>
