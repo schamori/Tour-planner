@@ -8,14 +8,14 @@ namespace DAL
 {
     public interface ITourRepo
     {
-        Route? GetTour(string tourName);
+        Tour? GetTour(string tourName);
 
-        void Add(Route obj);
-        List<Route> GetAllTours();
+        void Add(Tour obj);
+        List<Tour> GetAllTours();
         void DeleteTour(string tourName);
-        void UpdateTour(Route obj);
+        void UpdateTour(Tour obj);
 
-        public Route? GetTourById(Guid tourId);
+        public Tour? GetTourById(Guid tourId);
 
 
     }

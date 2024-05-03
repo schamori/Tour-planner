@@ -38,14 +38,6 @@
         <Run Text="Description: "/>
         <Run FontWeight="Normal" Text="{Binding SelectedRoute.Description}"/>
                 </TextBlock>
-                <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
-        <Run Text="Rating average: "/>
-        <Run FontWeight="Normal" Text="{Binding SelectedRoute.RatingAverage}"/>
-                </TextBlock>
-                <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
-        <Run Text="Total Votes: "/>
-        <Run FontWeight="Normal" Text="{Binding SelectedRoute.TotalVotes}"/>
-                </TextBlock>
 
                 <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
         <Run Text="Popularity: "/>

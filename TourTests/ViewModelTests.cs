@@ -19,7 +19,7 @@ namespace TourTests
         {
             var tourServiceMock = new Mock<ITourService>();
             var logServiceMock = new Mock<ITourLogService>();
-            tourServiceMock.Setup(service => service.GetAllTours()).Returns(new List<Route>());
+            tourServiceMock.Setup(service => service.GetAllTours()).Returns(new List<Tour>());
 
 
             mockViewModel = new Mock<MainWindowViewModel>(tourServiceMock.Object, logServiceMock.Object);

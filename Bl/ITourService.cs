@@ -8,13 +8,13 @@ namespace Bl
 {
     public interface ITourService
     {
-        List<Route> GetAllTours();
+        List<Tour> GetAllTours();
         
-        void AddTour(Route route, bool update);
+        void AddTour(Tour route, bool update);
 
-        Route? GetTourById(Guid tourId);
+        Tour? GetTourById(Guid tourId);
 
-        Route? GetTour(string tourName);
+        Tour? GetTour(string tourName);
         void DeleteTour(string tourName);
         void ModifyTour();
     }

@@ -21,15 +21,16 @@ namespace TourPlanner.ViewModels
         private Visibility _toursVisibility = Visibility.Visible;
         private Visibility _mapVisibility = Visibility.Hidden;
         private Visibility _addTourVisibility = Visibility.Hidden;
-        private Visibility _logVisibility = Visibility.Visible;
+        private Visibility _logVisibility = Visibility.Hidden;
         private Visibility _addLogVisibility = Visibility.Hidden;
         private Visibility _tourDetailsVisibility = Visibility.Hidden;
-        private Visibility _addLogButtonVisibility = Visibility.Collapsed;
+        private Visibility _addLogButtonVisibility = Visibility.Hidden;
         private Visibility _dropDownVisibility = Visibility.Hidden;
 
 
         public ITourService _tourService;
         public ITourLogService _tourLogService;
+        public IRouteService _routeService;
         
 
         public AddTourViewModel AddTourVM { get; private set; }
@@ -38,7 +39,7 @@ namespace TourPlanner.ViewModels
         public AddTourLogModelView AddTourLogsVM  { get; private set; }
         public MapViewModel MapVM { get; private set; }
         public DropdownModelView DropDownVM { get; private set; }
-        public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService)
+        public MainWindowViewModel(ITourService tourService, ITourLogService tourLogService, IRouteService routeService)
         {
             AddTourVM = new AddTourViewModel(this);
             TourLogsVM = new TourLogsViewModel(this);
@@ -48,6 +49,7 @@ namespace TourPlanner.ViewModels
             MapVM = new MapViewModel();
             _tourService = tourService;
             _tourLogService = tourLogService;
+            _routeService = routeService;
 
             TourVM.TourSelected += MapVM.LoadMapImage;  // Subscribe to the TourSelected event
 

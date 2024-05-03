@@ -4,13 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace TourPlanner.ViewModels
 {
     public class MapViewModel : ViewModelBase
     {
-        private string _mapImageUrl;
-        public string MapImageUrl
+        private BitmapImage _mapImageUrl;
+        public BitmapImage MapImageUrl
         {
             get => _mapImageUrl;
             set
@@ -30,15 +31,55 @@ namespace TourPlanner.ViewModels
             string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder");
             string searchPattern = $"tour_{tourId}_tile_*.png";  // Der Suchpattern entspricht dem Speichermuster
             var files = Directory.GetFiles(folderPath, searchPattern);
+
             if (files.Length > 0)
             {
-                // Der 'file:///' ist notwendig, damit WPF den lokalen Dateipfad als URI interpretieren kann
-                MapImageUrl = "file:///" + files[0].Replace("\\", "/");
+                var filePath = files[0];
+                var image = new BitmapImage(); //BitmapCacheOption um Bild vollständig in Speicher zu laden
+
+                using (var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read))
+                {
+                    image.BeginInit();
+                    image.CacheOption = BitmapCacheOption.OnLoad;
+                    image.StreamSource = stream;
+                    image.EndInit();
+                }
+
+                MapImageUrl = image;
             }
             else
             {
                 // Setze ein Standardbild oder eine Fehlermeldung
-                MapImageUrl = "path_to_default_image.png";
+                MapImageUrl = new BitmapImage(new Uri("path_to_default_image.png", UriKind.RelativeOrAbsolute));
+            }
+        }
+
+        public void DeleteMapImage(Guid tourId)
+        {
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder");
+            string searchPattern = $"tour_{tourId}_tile_*.png";  // Der Suchpattern entspricht dem Speichermuster
+            var files = Directory.GetFiles(folderPath, searchPattern);
+            foreach (var file in files)
+            {
+                File.Delete(file);
+            }
+        }
+
+        public void ModifyMapImage(Guid oldTourId, Guid newTourId)
+        {
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder");
+            string searchPattern = $"tour_{oldTourId}_tile_*.png";  // Der Suchpattern entspricht dem Speichermuster
+            var files = Directory.GetFiles(folderPath, searchPattern);
+            foreach (var oldFilePath in files)
+            {
+                var oldFileName = Path.GetFileName(oldFilePath);
+                var newFileName = oldFileName.Replace(oldTourId.ToString(), newTourId.ToString());
+                var newFilePath = Path.Combine(folderPath, newFileName);
+
+                // Umbenennen der Datei
+                File.Move(oldFilePath, newFilePath);
             }
         }
     }

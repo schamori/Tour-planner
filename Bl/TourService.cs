@@ -16,7 +16,7 @@ namespace Bl
         {
             _tourRepo = tourRepo;
         }
-        public void AddTour(Route route, bool update)
+        public void AddTour(Tour route, bool update)
         {
             if (update)
                 _tourRepo.UpdateTour(route);
@@ -31,17 +31,17 @@ namespace Bl
             _tourRepo.DeleteTour(tourName);
         }
 
-        public List<Route> GetAllTours()
+        public List<Tour> GetAllTours()
         {
             return _tourRepo.GetAllTours();
         }
 
-        public Route? GetTour(string tourName)
+        public Tour? GetTour(string tourName)
         {
             return _tourRepo.GetTour(tourName);
         }
 
-        public Route? GetTourById(Guid tourId)
+        public Tour? GetTourById(Guid tourId)
         {
             return _tourRepo.GetTourById(tourId);
         }

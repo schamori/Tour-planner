@@ -48,8 +48,10 @@ namespace TourPlanner
 
             ITourService tourService = new TourService(tourRepo);
             ITourLogService tourLogService = new TourLogService(tourLogRepo);
+
+            IRouteService routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
             InitializeComponent();
-            this.DataContext = new MainWindowViewModel(tourService, tourLogService);
+            this.DataContext = new MainWindowViewModel(tourService, tourLogService, routeService);
 
             log.Info("Application is starting.");
         }

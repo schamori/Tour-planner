@@ -42,8 +42,8 @@ namespace TourPlanner.ViewModels
             }
         }
         public event Action<Guid> TourSelected;
-        private Route _selectedroute;
-        public Route SelectedRoute
+        private Tour _selectedroute;
+        public Tour SelectedRoute
         {
             get => _selectedroute;
             set
@@ -56,17 +56,6 @@ namespace TourPlanner.ViewModels
                 }
             }
 
-        }
-
-        private ObservableCollection<Tour> _filteredTours;
-        public ObservableCollection<Tour> FilteredTours
-        {
-            get => _filteredTours;
-            set
-            {
-                _filteredTours = value;
-                OnPropertyChanged(nameof(FilteredTours));
-            }
         }
 
         private string _tourSearchText = "";
@@ -87,8 +76,23 @@ namespace TourPlanner.ViewModels
         {
             LoadAllTours();
             var lowerCaseSearchText = TourSearchText.ToLower();
-            Tours = new ObservableCollection<Tour>(Tours.Where(tour =>
-                tour.Name.ToLower().Contains(lowerCaseSearchText)));
+            Tours = new ObservableCollection<Tour>(
+        Tours.Where(tour =>
+            (tour.Name?.ToLower().Contains(lowerCaseSearchText) == true) ||
+            (tour.StartAddress?.ToLower().Contains(lowerCaseSearchText) == true) ||
+            (tour.EndAddress?.ToLower().Contains(lowerCaseSearchText) == true) ||
+            (tour.TransportType?.ToLower().Contains(lowerCaseSearchText) == true) ||
+            tour.Distance.ToString().ToLower().Contains(lowerCaseSearchText) ||
+            tour.EstimatedTime.ToString().ToLower().Contains(lowerCaseSearchText) ||
+            (tour.Description?.ToLower().Contains(lowerCaseSearchText) == true) ||
+            (tour.TourLogs?.Any(log =>
+                (log.Comment?.ToLower().Contains(lowerCaseSearchText) == true) ||
+                (log.Difficulty?.ToLower().Contains(lowerCaseSearchText) == true) ||
+                log.TotalDistance.ToString().ToLower().Contains(lowerCaseSearchText) ||
+                log.TotalTime.ToString().ToLower().Contains(lowerCaseSearchText) ||
+                log.Rating.ToString().ToLower().Contains(lowerCaseSearchText)) == true)
+        )
+    );
         }
 
         public ICommand DeleteCommand { get; private set; }
@@ -121,7 +125,7 @@ namespace TourPlanner.ViewModels
 
         }
 
-        public void CreateTourReportPdf(Route tour, string filePath)
+        public void CreateTourReportPdf(Tour tour, string filePath)
         {
             PdfDocument document = new PdfDocument();
             document.Info.Title = "Tour Report";
@@ -150,7 +154,7 @@ namespace TourPlanner.ViewModels
             yPoint += 20;
             gfx.DrawString($"Distance: {tour.Distance} km", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
             yPoint += 20;
-            gfx.DrawString($"Estimated Time: {tour.EstimatedTime} minutes", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+            gfx.DrawString($"Estimated Time: {tour.EstimatedTime} seconds", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
             yPoint += 20;
             gfx.DrawString($"Creation Date: {tour.CreationDate.ToShortDateString()}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
             yPoint += 20;
@@ -205,14 +209,19 @@ namespace TourPlanner.ViewModels
 
         public void LoadAllTours()
         {
-            List<Route> allTours = _mainViewModel._tourService.GetAllTours();
-            Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name, Id = tour.Id }));
+            List<Tour> allTours = _mainViewModel._tourService.GetAllTours();
+            Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name, Id = tour.Id, Description = tour.Description,
+                Distance = tour.Distance, EndAddress = tour.EndAddress, EstimatedTime = tour.EstimatedTime, StartAddress = tour.StartAddress, TransportType = tour.TransportType }));
         }
 
         private void ExecuteDeleteTour(object obj)
         {
             Tour tour = obj as Tour;
 
+            _mainViewModel.TourDetailsVisibility = Visibility.Hidden;
+            _mainViewModel.MapVisibility = Visibility.Hidden;
+            _mainViewModel.LogVisibility = Visibility.Hidden;
+            _mainViewModel.MapVM.DeleteMapImage(tour!.Id);
             _mainViewModel._tourService.DeleteTour(tour!.Name);
             LoadAllTours();
             List<TourLog> tourLogs = _mainViewModel._tourLogService.GetAllTourLogsForTour(tour!.Id);
@@ -222,7 +231,7 @@ namespace TourPlanner.ViewModels
         {
             Tour tour = parameter as Tour;
 
-            Route route = _mainViewModel._tourService.GetTour(tour!.Name)!;
+            Tour route = _mainViewModel._tourService.GetTour(tour!.Name)!;
             _mainViewModel.AddTourVM.nameToModify = route.Name;
             _mainViewModel.AddTourVM.Id = route.Id;
             _mainViewModel.AddTourVM.Name = route.Name;
@@ -239,12 +248,13 @@ namespace TourPlanner.ViewModels
             var test = _mainViewModel._tourLogService.GetAllTourLogsForTour(tourId);
             SelectedRoute = _mainViewModel._tourService.GetTourById(tourId)!;
             _mainViewModel.AddLogButtonVisibility = Visibility.Visible;
+            _mainViewModel.LogVisibility = Visibility.Visible;
             _mainViewModel.TourDetailsVisibility = Visibility.Visible;
             _mainViewModel.MapVisibility = Visibility.Visible;
             // Calculate Stats
             Popularity = SelectedRoute.TourLogs?.Count ?? 0;
             
-            if (SelectedRoute.TourLogs != null) {
+            if (SelectedRoute.TourLogs?.Count > 0) {
                 _mainViewModel.TourLogsVM.SelectedTourLogs = new ObservableCollection<TourLog>(SelectedRoute.TourLogs);
                 var averageDifficulty = SelectedRoute.TourLogs.Average(log => DifficultyToDouble(log.Difficulty));
                 var averageTime = SelectedRoute.TourLogs.Average(log => log.TotalTime);

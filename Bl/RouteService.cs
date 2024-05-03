@@ -9,7 +9,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Bl
 {
-    public class RouteService
+    public class RouteService : IRouteService
     {
         private readonly OpenRouteServiceClient _orsClient;
 
@@ -18,7 +18,7 @@ namespace Bl
             _orsClient = new OpenRouteServiceClient(apiKey);
         }
 
-        public async Task<Route> CreateRouteAsync(string name, string description, string startAddress, string endAddress, string transportType)
+        public async Task<Tour> CreateRouteAsync(Guid id, string name, string description, string startAddress, string endAddress, string transportType)
         {
             var startCoords = await _orsClient.GeocodeAddress(startAddress);
             var endCoords = await _orsClient.GeocodeAddress(endAddress);
@@ -42,13 +42,18 @@ namespace Bl
             var distance = (double)summary["distance"];
             var duration = (int)summary["duration"];
 
-            Route newRoute = new Route(Guid.NewGuid(), name, description, startAddress, endAddress, transportType, distance, duration, DateTime.Now);
+            Tour newRoute = new Tour(id, name, description, startAddress, endAddress, transportType, distance, duration, DateTime.Now);
 
             // Logik, um das Bild der Route zu bekommen, würde hier folgen
-            var startTile = _orsClient.DownloadTileImage(startLat, startLng, 17, newRoute.Id);
-            var endTile = _orsClient.DownloadTileImage(endLat, endLng, 17, newRoute.Id);
+            DownloadTile(startLat, startLng, 17, newRoute.Id);
+            DownloadTile(endLat, endLng, 17, newRoute.Id);
             return newRoute;
             // Erstelle eine Route-Instanz und fülle sie mit den Daten
+        }
+
+        public async void DownloadTile(double Lat, double Lng, int zoom, Guid Id)
+        {
+            await _orsClient.DownloadTileImage(Lat, Lng, zoom, Id);
         }
 
     }

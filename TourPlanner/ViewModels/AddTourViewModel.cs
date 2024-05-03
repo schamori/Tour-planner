@@ -3,6 +3,7 @@ using System.Windows.Input;
 using System.Windows;
 using Bl;
 using Models;
+using TourPlanner.Views;
 // Ensure you import necessary namespaces
 
 namespace TourPlanner.ViewModels
@@ -142,11 +143,19 @@ namespace TourPlanner.ViewModels
         private async void CreateNewTour(bool update)
         {
             var routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
-            Route route;
+            Tour route;
 
             try
             {
-                route = await routeService.CreateRouteAsync(Name, Description, From, To, TransportType);
+                if (update)
+                {
+                    _mainViewModel.MapVM.DeleteMapImage(Id);
+                    route = await routeService.CreateRouteAsync(Id, Name, Description, From, To, TransportType);
+                }
+                else
+                {
+                    route = await routeService.CreateRouteAsync(Guid.NewGuid(), Name, Description, From, To, TransportType); ;
+                }
             }
             catch (System.ArgumentOutOfRangeException)
             {
@@ -169,11 +178,7 @@ namespace TourPlanner.ViewModels
 
                 return;
             }
-            if (update)
-            {
-                route.Id = Id;
-            }
-
+            
             _mainViewModel._tourService.AddTour(route, update);
             _mainViewModel.ToursVisibility = Visibility.Visible;
             _mainViewModel.AddTourVisibility = Visibility.Hidden;

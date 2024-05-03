@@ -29,7 +29,7 @@ namespace TourPlanner.ViewModels
             openFileDialog.Filter = "DAT file (*.dat)|*.dat";
             if (openFileDialog.ShowDialog() == true)
             {
-                List<Route>? loadedTours = Deserialize<List<Route>>(openFileDialog.FileName);
+                List<Tour>? loadedTours = Deserialize<List<Tour>>(openFileDialog.FileName);
 
                 string? responseMessage = null;
 
@@ -37,11 +37,12 @@ namespace TourPlanner.ViewModels
                     responseMessage = "Specified File is empty!";
                 else
                 {
-                    foreach (Route route in loadedTours)
+                    foreach (Tour route in loadedTours)
                     {
                         try
                         {
                             _mainViewModel._tourService.AddTour(route, false);
+                            _mainViewModel._routeService.CreateRouteAsync(route.Id, route.Name, route.Description, route.StartAddress, route.EndAddress, route.TransportType);
                         }
                         catch (RouteAlreadyExistsException)
                         {

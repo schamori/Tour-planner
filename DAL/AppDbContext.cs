@@ -3,7 +3,7 @@ using Models;
 public class AppDbContext : DbContext
 {
     public DbSet<TourLog> TourLogs { get; set; }
-    public DbSet<Route> Routes { get; set; }
+    public DbSet<Tour> Routes { get; set; }
     public AppDbContext() { }
 
     public AppDbContext(DbContextOptions<AppDbContext> options)
@@ -28,10 +28,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<TourLog>().ToTable("TourLogs");
         modelBuilder.Entity<TourLog>().HasKey(t => t.Id);
 
-        modelBuilder.Entity<Route>().ToTable("Routes");
-        modelBuilder.Entity<Route>().HasKey(t => t.Id);
+        modelBuilder.Entity<Tour>().ToTable("Routes");
+        modelBuilder.Entity<Tour>().HasKey(t => t.Id);
 
-        modelBuilder.Entity<Route>()
+        modelBuilder.Entity<Tour>()
         .HasMany(r => r.TourLogs) // Route has many TourLogs
         .WithOne() // Each TourLog has one Route
         .HasForeignKey(t => t.TourId) // Foreign key in TourLog
