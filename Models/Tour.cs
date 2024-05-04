@@ -10,9 +10,26 @@ namespace Models
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string StartAddress { get; set; }
-        public string EndAddress { get; set; }
+        private string _description;
+        public string Description
+        {
+            get => ModelHelper.WrapText(_description);
+            set => _description = value;
+        }
+
+        private string _startAddress;
+        public string StartAddress
+        {
+            get => ModelHelper.WrapText(_startAddress);
+            set => _startAddress = value;
+        }
+
+        private string _endAddress;
+        public string EndAddress
+        {
+            get => ModelHelper.WrapText(_endAddress);
+            set => _endAddress = value;
+        }
         public string TransportType { get; set; }
         public double Distance { get; set; }
         public int EstimatedTime { get; set; }

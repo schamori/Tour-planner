@@ -91,7 +91,7 @@ namespace Bl
             var image = GetImageForTourid(tour.Id);
 
             PdfDocument document = new PdfDocument();
-            document.Info.Title = "Tour Report";
+            document.Info.Title = "Tour  Report";
 
             PdfPage page = document.AddPage();
             XGraphics gfx = XGraphics.FromPdfPage(page);
