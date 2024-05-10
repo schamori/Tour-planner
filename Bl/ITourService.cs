@@ -17,5 +17,7 @@ namespace Bl
         Tour? GetTour(string tourName);
         void DeleteTour(string tourName);
         void ModifyTour();
+
+        void ChangeTourFavorite(Guid tourId, bool toFavorite);
     }
 }

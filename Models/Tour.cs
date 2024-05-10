@@ -17,6 +17,7 @@ namespace Models
             set => _description = value;
         }
 
+
         private string _startAddress;
         public string StartAddress
         {
@@ -48,6 +49,7 @@ namespace Models
             set { _tourLogs = value; }
         }
 
+        public bool Favorite { get; set; }
         // Default constructor needed for serialization
         public Tour() { }
 
@@ -63,6 +65,7 @@ namespace Models
             Distance = distance;
             EstimatedTime = estimatedTime;
             CreationDate = creationDate;
+            Favorite = false;
         }
 
         // Serialization constructor

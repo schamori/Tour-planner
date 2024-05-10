@@ -24,6 +24,20 @@ namespace DAL
             _context.SaveChanges();
         }
 
+        public void ChangeTourFavorite(Guid tourId, bool toFavorite)
+        {
+            var tour = _context.Routes.FirstOrDefault(t => t.Id == tourId);
+            if (tour == null)
+                throw new RouteNotFoundException();
+            tour.Favorite = toFavorite;
+            _context.SaveChanges();
+
+
+
+
+
+        }
+
         public void DeleteTour(string tourName)
         {
             var tour = _context.Routes.FirstOrDefault(t => t.Name == tourName);

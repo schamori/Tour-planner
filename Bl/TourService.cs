@@ -26,6 +26,11 @@ namespace Bl
 
         }
 
+        public void ChangeTourFavorite(Guid tourId, bool toFavorite)
+        {
+            _tourRepo.ChangeTourFavorite(tourId, toFavorite);
+        }
+
         public void DeleteTour(string tourName)
         {
             _tourRepo.DeleteTour(tourName);

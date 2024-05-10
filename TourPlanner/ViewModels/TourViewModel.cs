@@ -29,6 +29,22 @@ namespace TourPlanner.ViewModels
 
         public ObservableCollection<Tour> _tours;
 
+
+        public Visibility ShowAllVisibilty => OnlyFavorite ? Visibility.Visible : Visibility.Hidden;
+
+        private Visibility _onlyFavoriteVisbilty;
+        public Visibility OnlyFavoriteVisibilty
+        {
+            get => _onlyFavoriteVisbilty;
+            set
+            {
+                _onlyFavoriteVisbilty = value;
+                OnPropertyChanged(nameof(OnlyFavoriteVisibilty));
+                OnPropertyChanged(nameof(ShowAllVisibilty));
+            }
+        }
+
+
         public ObservableCollection<Tour> Tours
         {
             get => _tours;
@@ -95,16 +111,35 @@ namespace TourPlanner.ViewModels
     );
         }
 
+        private bool _onlyFavorite = false;
+
+        public bool OnlyFavorite
+        {
+            get => _onlyFavorite;
+            set
+            {
+                _onlyFavorite = value;
+                OnlyFavoriteVisibilty = value ? Visibility.Hidden : Visibility.Visible;
+            }
+        }
+
+        public ICommand OnlyFavoritesCommand { get; set; }
+
         public ICommand DeleteCommand { get; private set; }
 
         public ICommand GotToAddCommand { get; set; }
 
         public ICommand ModifyCommand { get; set; }
+
+        public ICommand FavoriteCommand { get; set; }
+
         public ICommand SearchToursCommand { get; set; }
 
         public ICommand TourReportCommand { get; set; }
-
-
+        
+        
+        public ICommand ShowAllCommand { get; set; }
+        
         public TourViewModel(MainWindowViewModel mainViewModel)
         {
             _mainViewModel = mainViewModel;
@@ -113,6 +148,7 @@ namespace TourPlanner.ViewModels
                 _mainViewModel.ToursVisibility = Visibility.Hidden;
                 _mainViewModel.AddTourVisibility = Visibility.Visible;
             });
+            FavoriteCommand = new RelayCommand(ExecuteFavoriteTour);
             DeleteCommand = new RelayCommand(ExecuteDeleteTour);
             ModifyCommand = new RelayCommand(ModifyAction);
             SearchToursCommand = new RelayCommand(o =>
@@ -121,6 +157,16 @@ namespace TourPlanner.ViewModels
             });
 
             TourReportCommand = new RelayCommand(o => { ExecuteTourReportCommand(); });
+
+            OnlyFavoritesCommand = new RelayCommand(o => { 
+                OnlyFavorite = true;   
+                LoadAllTours();
+            });
+
+            ShowAllCommand = new RelayCommand(o => {
+                OnlyFavorite = false;
+                LoadAllTours();
+            });
 
 
         }
@@ -149,8 +195,21 @@ namespace TourPlanner.ViewModels
         public void LoadAllTours()
         {
             List<Tour> allTours = _mainViewModel._tourService.GetAllTours();
+
+            if (OnlyFavorite)
+            {  
+                allTours = allTours.FindAll(tour => tour.Favorite);
+            }
             Tours = new ObservableCollection<Tour>(allTours.Select(tour => new Tour { Name = tour.Name, Id = tour.Id, Description = tour.Description,
                 Distance = tour.Distance, EndAddress = tour.EndAddress, EstimatedTime = tour.EstimatedTime, StartAddress = tour.StartAddress, TransportType = tour.TransportType }));
+        }
+
+        private void ExecuteFavoriteTour(object obj)
+        {
+            Tour tour = obj as Tour;
+            _mainViewModel._tourService.ChangeTourFavorite(tour!.Id, true);
+
+            LoadAllTours();
         }
 
         private void ExecuteDeleteTour(object obj)

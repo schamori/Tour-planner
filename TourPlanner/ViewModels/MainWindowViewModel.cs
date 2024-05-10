@@ -28,6 +28,7 @@ namespace TourPlanner.ViewModels
         private Visibility _dropDownVisibility = Visibility.Hidden;
 
 
+
         public ITourService _tourService;
         public ITourLogService _tourLogService;
         public IRouteService _routeService;

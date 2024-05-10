@@ -17,6 +17,9 @@ namespace DAL
 
         public Tour? GetTourById(Guid tourId);
 
+        void ChangeTourFavorite(Guid tourId, bool toFavorite);
+
+
 
     }
 }
