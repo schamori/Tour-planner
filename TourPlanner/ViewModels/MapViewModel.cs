@@ -29,7 +29,7 @@ namespace TourPlanner.ViewModels
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder");
-            string searchPattern = $"tour_{tourId}_tile_*.png";  // Der Suchpattern entspricht dem Speichermuster
+            string searchPattern = $"tour_{tourId}.png";  // Der Suchpattern entspricht dem Speichermuster
             var files = Directory.GetFiles(folderPath, searchPattern);
 
             if (files.Length > 0)
@@ -58,7 +58,7 @@ namespace TourPlanner.ViewModels
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder");
-            string searchPattern = $"tour_{tourId}_tile_*.png";  // Der Suchpattern entspricht dem Speichermuster
+            string searchPattern = $"tour_{tourId}.png";  // Der Suchpattern entspricht dem Speichermuster
             var files = Directory.GetFiles(folderPath, searchPattern);
             foreach (var file in files)
             {
@@ -70,7 +70,7 @@ namespace TourPlanner.ViewModels
         {
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder");
-            string searchPattern = $"tour_{oldTourId}_tile_*.png";  // Der Suchpattern entspricht dem Speichermuster
+            string searchPattern = $"tour_{oldTourId}.png";  // Der Suchpattern entspricht dem Speichermuster
             var files = Directory.GetFiles(folderPath, searchPattern);
             foreach (var oldFilePath in files)
             {

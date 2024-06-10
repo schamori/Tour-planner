@@ -4,14 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using TourPlanner.ViewModels;
 using Models;
 using Bl;
@@ -19,6 +11,8 @@ using DAL;
 using log4net;
 using TourPlanner.Views;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.IO;
 
 
 namespace TourPlanner
@@ -27,7 +21,6 @@ namespace TourPlanner
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     /// 
-    
 
     public partial class MainWindow : Window
     {
@@ -36,12 +29,18 @@ namespace TourPlanner
         {
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
 
-            var connectionString = "Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin";
+            string basePath = AppDomain.CurrentDomain.BaseDirectory;
+            string folderPath = Path.Combine(basePath, "..\\..\\..", "appsettings.json");
+            IConfiguration config = new ConfigurationBuilder()
+                .AddJsonFile(folderPath, false, true) // add as content / copy-always
+                .Build();
+
+            var connectionString = config["ConnectionStrings:DefaultConnection"];
             var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
             optionsBuilder.UseNpgsql(connectionString);
 
             AppDbContext _context = new AppDbContext(optionsBuilder.Options);
-            _context.Database.Migrate();
+            //_context.Database.Migrate();
             _context.EnsureDatabase();
             ITourRepo tourRepo = new TourRepo(_context);
             ITourLogRepo tourLogRepo = new TourLogsRepo(_context);
@@ -49,7 +48,8 @@ namespace TourPlanner
             ITourService tourService = new TourService(tourRepo);
             ITourLogService tourLogService = new TourLogService(tourLogRepo);
 
-            IRouteService routeService = new RouteService("5b3ce3597851110001cf62481e3cc9942506493089ff10a91977e5c0");
+            var apiKey = config["OpenRouteService:ApiKey"];
+            IRouteService routeService = new RouteService(apiKey);
 
             IExportService exportService = new ExportService();
             InitializeComponent();
@@ -57,8 +57,5 @@ namespace TourPlanner
 
             log.Info("Application is starting.");
         }
-
-
-
     }
 }

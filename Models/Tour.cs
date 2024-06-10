@@ -50,6 +50,7 @@ namespace Models
         }
 
         public bool Favorite { get; set; }
+
         // Default constructor needed for serialization
         public Tour() { }
 
@@ -80,11 +81,12 @@ namespace Models
             Distance = info.GetDouble("Distance");
             EstimatedTime = info.GetInt32("EstimatedTime");
             CreationDate = info.GetDateTime("CreationDate");
-string tourLogsJson = info.GetString("TourLogs");
-    if (!string.IsNullOrEmpty(tourLogsJson))
-    {
-        TourLogs = JsonConvert.DeserializeObject<ICollection<TourLog>>(tourLogsJson);
-    }        }
+            string tourLogsJson = info.GetString("TourLogs");
+            if (!string.IsNullOrEmpty(tourLogsJson))
+            {
+                TourLogs = JsonConvert.DeserializeObject<ICollection<TourLog>>(tourLogsJson);
+            }
+        }
 
         // Implementing GetObjectData for ISerializable
         public void GetObjectData(SerializationInfo info, StreamingContext context)

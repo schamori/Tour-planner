@@ -154,12 +154,12 @@ namespace TourPlanner.ViewModels
                 }
                 else
                 {
-                    route = await routeService.CreateRouteAsync(Guid.NewGuid(), Name, Description, From, To, TransportType); ;
+                    route = await routeService.CreateRouteAsync(Guid.NewGuid(), Name, Description, From, To, TransportType);
                 }
             }
             catch (System.ArgumentOutOfRangeException)
             {
-                ErrorMessage = "Start or End Location not found";
+                ErrorMessage = "Start or End Location no found";
                 IsCommandExecuting = false;
 
                 return;
@@ -173,7 +173,7 @@ namespace TourPlanner.ViewModels
             }
             catch (System.ArgumentNullException)
             {
-                ErrorMessage = "Start or End Location not found";
+                ErrorMessage = "Start or End Location null";
                 IsCommandExecuting = false;
 
                 return;

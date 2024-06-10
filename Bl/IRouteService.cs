@@ -10,6 +10,5 @@ namespace Bl
     public interface IRouteService
     {
         Task<Tour> CreateRouteAsync(Guid id, string name, string description, string startAddress, string endAddress, string transportType);
-        void DownloadTile(double Lat, double Lng, int zoom, Guid Id);
     }
 }

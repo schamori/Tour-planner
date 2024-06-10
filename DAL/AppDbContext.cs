@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Models;
+
 public class AppDbContext : DbContext
 {
     public DbSet<TourLog> TourLogs { get; set; }
@@ -14,9 +16,17 @@ public class AppDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
+        string basePath = AppDomain.CurrentDomain.BaseDirectory;
+        string folderPath = Path.Combine(basePath, "..\\..\\..\\..\\TourPlanner\\appsettings.json");
+        IConfiguration config = new ConfigurationBuilder()
+            .AddJsonFile(folderPath, false, true) // add as content / copy-always
+            .Build();
+
+        var connectionString = config["ConnectionStrings:DefaultConnection"];
+
         if (!optionsBuilder.IsConfigured)
         {
-            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=tour;Username=mpleyer;Password=admin;Include Error Detail=True;");
+            optionsBuilder.UseNpgsql(connectionString);
 
         }
 
