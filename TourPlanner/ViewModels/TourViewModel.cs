@@ -30,6 +30,27 @@ namespace TourPlanner.ViewModels
         public ObservableCollection<Tour> _tours;
 
 
+        private Visibility _selectedTourNotFavorite;
+        public Visibility SelectedTourNotFavorite
+        {
+            get => _selectedTourNotFavorite;
+            set
+            {
+                _selectedTourNotFavorite = value;
+                OnPropertyChanged(nameof(SelectedTourNotFavorite));
+            }
+        }
+
+        private Visibility _selectedTourFavorite;
+        public Visibility SelectedTourFavorite
+        {
+            get => _selectedTourFavorite;
+            set
+            {
+                _selectedTourFavorite = value;
+                OnPropertyChanged(nameof(SelectedTourFavorite));
+            }
+        }
         public Visibility ShowAllVisibilty => OnlyFavorite ? Visibility.Visible : Visibility.Hidden;
 
         private Visibility _onlyFavoriteVisbilty;
@@ -66,6 +87,8 @@ namespace TourPlanner.ViewModels
             {
                 if (_selectedroute != value)
                 {
+                    SelectedTourNotFavorite = value.Favorite ?  Visibility.Collapsed: Visibility.Visible;
+                    SelectedTourFavorite = value.Favorite ? Visibility.Visible :Visibility.Collapsed ;
                     _selectedroute = value;
                     OnPropertyChanged(nameof(SelectedRoute));
                     TourSelected?.Invoke(_selectedroute.Id);
@@ -206,10 +229,14 @@ namespace TourPlanner.ViewModels
 
         private void ExecuteFavoriteTour(object obj)
         {
-            Tour tour = obj as Tour;
-            _mainViewModel._tourService.ChangeTourFavorite(tour!.Id, true);
+            bool isFavorite = SelectedRoute.Favorite;
+            _mainViewModel._tourService.ChangeTourFavorite(SelectedRoute.Id, !isFavorite);
+            SelectedRoute.Favorite = !isFavorite; // Update the property locally
 
-            LoadAllTours();
+            // Update visibility based on the new favorite status
+            SelectedTourNotFavorite = isFavorite ? Visibility.Visible : Visibility.Collapsed;
+            SelectedTourFavorite = isFavorite ? Visibility.Collapsed : Visibility.Visible;
+
         }
 
         private void ExecuteDeleteTour(object obj)

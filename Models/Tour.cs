@@ -2,12 +2,19 @@
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
+using System.ComponentModel;
 
 namespace Models
 {
     [Serializable]
-    public class Tour : ISerializable
+    public class Tour : ISerializable, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
         public Guid Id { get; set; }
         public string Name { get; set; }
         private string _description;
@@ -43,14 +50,28 @@ namespace Models
         }
 
         private ICollection<TourLog> _tourLogs;
+
+
         public ICollection<TourLog> TourLogs
         {
             get { return _tourLogs; }
             set { _tourLogs = value; }
         }
 
-        public bool Favorite { get; set; }
+        private bool favorite;
 
+        public bool Favorite
+        {
+            get { return favorite; }
+            set
+            {
+                if (favorite != value)
+                {
+                    favorite = value;
+                    OnPropertyChanged(nameof(Favorite));
+                }
+            }
+        }
         // Default constructor needed for serialization
         public Tour() { }
 
