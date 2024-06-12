@@ -5,6 +5,7 @@ using Models;
 using Newtonsoft.Json.Linq;
 using log4net;
 using Bl;
+using System.IO;
 
 namespace Bl
 {
@@ -31,23 +32,18 @@ namespace Bl
                 var endLng = (double)endCoords["features"][0]["geometry"]["coordinates"][0];
                 JObject route = await _orsClient.GetRoute(startLat, startLng, endLat, endLng, transportType);
 
-                // Zugriff auf das erste Feature-Objekt
                 var feature = route["features"][0];
 
-                // Zugriff auf die Properties
                 var properties = feature["properties"];
 
-                // Zugriff auf Summary
                 var summary = properties["summary"];
 
-                // Extrahiere Distance und Duration
                 var distance = (double)summary["distance"];
                 var duration = (int)summary["duration"];
 
                 Tour newRoute = new Tour(id, name, description, startAddress, endAddress, transportType, distance, duration, DateTime.Now);
 
-                // Logik, um das Bild der Route zu bekommen, würde hier folgen
-                await CreateMap(startLat, startLng, endLat, endLng, newRoute.Id);
+                await CreateMap(startLat, startLng, endLat, endLng, newRoute.Id, distance);
 
                 return newRoute;
             }
@@ -58,7 +54,7 @@ namespace Bl
             }
         }
 
-        public async Task CreateMap(double startLat, double startLng, double endLat, double endLng, Guid Id)
+        public async Task CreateMap(double startLat, double startLng, double endLat, double endLng, Guid Id, double distance)
         {
             try
             {
@@ -69,10 +65,13 @@ namespace Bl
                 var maxLon = Math.Max(startLng, endLng);
 
                 var mapCreator = new MapCreator(minLon, minLat, maxLon, maxLat, _orsClient);
-                mapCreator.SetZoom(18);
+                mapCreator.SetZoom((int)(-1.3 * Math.Log(distance) + 26));
                 mapCreator.GetMarkers().Add(new GeoCoordinate(startLng, startLat));
                 mapCreator.GetMarkers().Add(new GeoCoordinate(endLng, endLat));
                 await mapCreator.GenerateImageAsync();
+                string basePath = AppDomain.CurrentDomain.BaseDirectory;
+                string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder"); 
+                Directory.CreateDirectory(folderPath);  // Stelle sicher, dass der Ordner existiert
                 mapCreator.SaveImage($"..\\..\\..\\..\\Bilder\\tour_{Id}.png");
             }
             catch (Exception ex)

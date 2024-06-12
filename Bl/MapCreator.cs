@@ -28,7 +28,6 @@ namespace Bl
             _maxLon = maxLon;
             _maxLat = maxLat;
             _client = client;
-            _zoom = 18;
             _markers = new List<GeoCoordinate>();
         }
 
