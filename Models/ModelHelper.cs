@@ -13,13 +13,26 @@ namespace Models
             if (string.IsNullOrEmpty(text)) return text;
 
             var wrapped = new System.Text.StringBuilder();
-            for (int i = 0; i < text.Length; i += maxLineLength)
+            var lines = text.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+
+            foreach (var line in lines)
             {
-                if (i + maxLineLength >= text.Length)
-                    wrapped.AppendLine(text.Substring(i));
+                if (line.Length <= maxLineLength)
+                {
+                    wrapped.Append(line);
+                }
                 else
-                    wrapped.AppendLine(text.Substring(i, maxLineLength));
+                {
+                    for (int i = 0; i < line.Length; i += maxLineLength)
+                    {
+                        if (i + maxLineLength >= line.Length)
+                            wrapped.Append(line.Substring(i));
+                        else
+                            wrapped.AppendLine(line.Substring(i, maxLineLength));
+                    }
+                }
             }
+
             return wrapped.ToString();
         }
     }
