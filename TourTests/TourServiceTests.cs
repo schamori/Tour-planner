@@ -24,84 +24,66 @@ namespace TourTests
         [Test]
         public void AddTour_ShouldAddTour()
         {
-            // Arrange
             var tour = new Tour { Id = Guid.NewGuid(), Name = "Tour1" };
 
-            // Act
             _tourService.AddTour(tour, false);
 
-            // Assert
             _mockTourRepo.Verify(repo => repo.Add(It.Is<Tour>(t => t.Id == tour.Id && t.Name == tour.Name)), Times.Once);
         }
 
         [Test]
         public void ChangeTourFavorite_ShouldChangeFavoriteStatus()
         {
-            // Arrange
             var tourId = Guid.NewGuid();
             var toFavorite = true;
 
-            // Act
             _tourService.ChangeTourFavorite(tourId, toFavorite);
 
-            // Assert
             _mockTourRepo.Verify(repo => repo.ChangeTourFavorite(tourId, toFavorite), Times.Once);
         }
 
         [Test]
         public void DeleteTour_ShouldDeleteTour()
         {
-            // Arrange
             var tourName = "Tour1";
 
-            // Act
             _tourService.DeleteTour(tourName);
 
-            // Assert
             _mockTourRepo.Verify(repo => repo.DeleteTour(tourName), Times.Once);
         }
 
         [Test]
         public void GetAllTours_ShouldReturnAllTours()
         {
-            // Arrange
             var tours = new List<Tour> { new Tour { Id = Guid.NewGuid(), Name = "Tour1" } };
             _mockTourRepo.Setup(repo => repo.GetAllTours()).Returns(tours);
 
-            // Act
             var result = _tourService.GetAllTours();
 
-            // Assert
             Assert.AreEqual(tours, result);
         }
 
         [Test]
         public void GetTour_ShouldReturnTour()
         {
-            // Arrange
             var tourName = "Tour1";
             var tour = new Tour { Id = Guid.NewGuid(), Name = tourName };
             _mockTourRepo.Setup(repo => repo.GetTour(tourName)).Returns(tour);
 
-            // Act
             var result = _tourService.GetTour(tourName);
 
-            // Assert
             Assert.AreEqual(tour, result);
         }
 
         [Test]
         public void GetTourById_ShouldReturnTour()
         {
-            // Arrange
             var tourId = Guid.NewGuid();
             var tour = new Tour { Id = tourId, Name = "Tour1" };
             _mockTourRepo.Setup(repo => repo.GetTourById(tourId)).Returns(tour);
 
-            // Act
             var result = _tourService.GetTourById(tourId);
 
-            // Assert
             Assert.AreEqual(tour, result);
         }
     }

@@ -39,20 +39,15 @@ namespace TourTests
         [Test]
         public void TourDetailsVisibility_ShouldBeHiddenInitially()
         {
-            // Assert
             Assert.AreEqual(Visibility.Hidden, _mainWindowViewModel.TourDetailsVisibility);
         }
 
         [Test]
         public void SetTourDetailsVisibility_ShouldUpdateVisibility()
         {
-            // Act
             _mainWindowViewModel.TourDetailsVisibility = Visibility.Visible;
 
-            // Assert
             Assert.AreEqual(Visibility.Visible, _mainWindowViewModel.TourDetailsVisibility);
         }
-
-        // Additional tests for other properties and methods
     }
 }

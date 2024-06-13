@@ -24,13 +24,10 @@ namespace TourTests
         [Test]
         public void AddTourLog_ShouldAddTourLog()
         {
-            // Arrange
             var tourLog = new TourLog(Guid.NewGuid(), DateTime.Now, "Nice trip", "Medium", 120, 60, "5 stars", Guid.NewGuid());
 
-            // Act
             _tourLogService.AddTourLog(tourLog.Comment, tourLog.Difficulty, tourLog.TotalDistance, tourLog.TotalTime, tourLog.Rating, tourLog.TourId);
 
-            // Assert
             _mockTourLogRepo.Verify(repo => repo.AddTourLog(It.Is<TourLog>(log =>
                 log.Comment == tourLog.Comment &&
                 log.Difficulty == tourLog.Difficulty &&
@@ -43,20 +40,16 @@ namespace TourTests
         [Test]
         public void DeleteTour_ShouldDeleteTourLogs()
         {
-            // Arrange
             var tourId = Guid.NewGuid();
 
-            // Act
             _tourLogService.DeleteTour(tourId);
 
-            // Assert
             _mockTourLogRepo.Verify(repo => repo.DeleteTourLog(tourId), Times.Once);
         }
 
         [Test]
         public void GetAllTourLogsForTour_ShouldReturnLogs()
         {
-            // Arrange
             var tourId = Guid.NewGuid();
             var tourLogs = new List<TourLog>
             {
@@ -65,39 +58,31 @@ namespace TourTests
             };
             _mockTourLogRepo.Setup(repo => repo.GetAllTourLogsForTour(tourId)).Returns(tourLogs);
 
-            // Act
             var result = _tourLogService.GetAllTourLogsForTour(tourId);
 
-            // Assert
             Assert.AreEqual(tourLogs, result);
         }
 
         [Test]
         public void GetLog_ShouldReturnLog()
         {
-            // Arrange
             var logId = Guid.NewGuid();
             var tourLog = new TourLog(logId, DateTime.Now, "Nice trip", "Medium", 120, 60, "5 stars", Guid.NewGuid());
             _mockTourLogRepo.Setup(repo => repo.GetSingleLog(logId)).Returns(tourLog);
 
-            // Act
             var result = _tourLogService.GetLog(logId);
 
-            // Assert
             Assert.AreEqual(tourLog, result);
         }
 
         [Test]
         public void UpdateLogId_ShouldUpdateLogIds()
         {
-            // Arrange
             var oldTourId = Guid.NewGuid();
             var newTourId = Guid.NewGuid();
 
-            // Act
             _tourLogService.UpdateLogId(oldTourId, newTourId);
 
-            // Assert
             _mockTourLogRepo.Verify(repo => repo.UpdateLogId(oldTourId, newTourId), Times.Once);
         }
     }

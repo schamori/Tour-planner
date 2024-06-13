@@ -41,87 +41,71 @@ namespace TourTests
         [Test]
         public void ExecuteAddTour_WhenNameIsEmpty_SetsErrorMessage()
         {
-            // Arrange
             _addTourViewModel.Description = "Description";
             _addTourViewModel.From = "Start Location";
             _addTourViewModel.To = "End Location";
             _addTourViewModel.TransportType = "Car";
 
-            // Act
             _addTourViewModel.AddTourCommand.Execute(null);
 
-            // Assert
             Assert.AreEqual("Name not set", _addTourViewModel.ErrorMessage);
         }
 
         [Test]
         public void ExecuteAddTour_WhenDescriptionIsEmpty_SetsErrorMessage()
         {
-            // Arrange
             _addTourViewModel.Name = "New Tour";
             _addTourViewModel.From = "Start Location";
             _addTourViewModel.To = "End Location";
             _addTourViewModel.TransportType = "Car";
 
-            // Act
             _addTourViewModel.AddTourCommand.Execute(null);
 
-            // Assert
             Assert.AreEqual("Description not set", _addTourViewModel.ErrorMessage);
         }
 
         [Test]
         public void ExecuteAddTour_WhenFromIsEmpty_SetsErrorMessage()
         {
-            // Arrange
             _addTourViewModel.Name = "New Tour";
             _addTourViewModel.Description = "Description";
             _addTourViewModel.To = "End Location";
             _addTourViewModel.TransportType = "Car";
 
-            // Act
             _addTourViewModel.AddTourCommand.Execute(null);
 
-            // Assert
             Assert.AreEqual("From location not set", _addTourViewModel.ErrorMessage);
         }
 
         [Test]
         public void ExecuteAddTour_WhenToIsEmpty_SetsErrorMessage()
         {
-            // Arrange
             _addTourViewModel.Name = "New Tour";
             _addTourViewModel.Description = "Description";
             _addTourViewModel.From = "Start Location";
             _addTourViewModel.TransportType = "Car";
 
-            // Act
             _addTourViewModel.AddTourCommand.Execute(null);
 
-            // Assert
             Assert.AreEqual("To location not set", _addTourViewModel.ErrorMessage);
         }
 
         [Test]
         public void ExecuteAddTour_WhenTransportTypeIsEmpty_SetsErrorMessage()
         {
-            // Arrange
             _addTourViewModel.Name = "New Tour";
             _addTourViewModel.Description = "Description";
             _addTourViewModel.From = "Start Location";
             _addTourViewModel.To = "End Location";
 
-            // Act
             _addTourViewModel.AddTourCommand.Execute(null);
 
-            // Assert
             Assert.AreEqual("TransportType not set", _addTourViewModel.ErrorMessage);
         }
 
         [Test]
         public void ExecuteAddTour_WhenTourWithSameNameExists_SetsErrorMessage()
         {
-            // Arrange
             _addTourViewModel.Name = "Existing Tour";
             _addTourViewModel.Description = "Description";
             _addTourViewModel.From = "Start Location";
@@ -130,10 +114,8 @@ namespace TourTests
 
             _mockTourService.Setup(s => s.GetTour("Existing Tour")).Returns(new Tour());
 
-            // Act
             _addTourViewModel.AddTourCommand.Execute(null);
 
-            // Assert
             Assert.AreEqual("Name already taken", _addTourViewModel.ErrorMessage);
         }
     }
