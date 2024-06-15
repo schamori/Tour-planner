@@ -29,10 +29,13 @@
                 <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
         <Run Text="Distance: "/>
         <Run FontWeight="Normal" Text="{Binding SelectedRoute.Distance}"/>
+                                        <Run Text=" meters"/>
+
                 </TextBlock>
                 <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
         <Run Text="EstimatedTime: "/>
         <Run FontWeight="Normal" Text="{Binding SelectedRoute.EstimatedTime}"/>
+                    <Run Text=" seconds"/>
                 </TextBlock>
                 <TextBlock FontWeight="Bold" FontSize="12" Margin="0,0,0,10">
         <Run Text="Description: "/>
