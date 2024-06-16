@@ -34,7 +34,7 @@ namespace Bl
 
             foreach (var tour in tourData)
             {
-                string line = $"Tour Name: {tour.Key}, Average Difficulty: {tour.Value.averageDifficulty}, Average Time: {tour.Value.averageTime} minutes, Average Distance: {tour.Value.averageDistance} km";
+                string line = $"Tour Name: {tour.Key}, Average Difficulty: {Math.Round(tour.Value.averageDifficulty)}, Average Time: {Math.Round(tour.Value.averageTime)} seconds, Average Distance: {Math.Round(tour.Value.averageDistance)} m";
                 gfx.DrawString(line, font, XBrushes.Black, new XRect(20, yPoint, page.Width - 40, page.Height), XStringFormats.TopLeft);
                 yPoint += 20;
             }
@@ -47,7 +47,7 @@ namespace Bl
         private XImage? GetImageForTourid(Guid tourId) { 
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bilder");
-            string searchPattern = $"tour_{tourId}_tile_*.png";  // Der Suchpattern entspricht dem Speichermuster
+            string searchPattern = $"tour_{tourId}.png";  // Der Suchpattern entspricht dem Speichermuster
             var files = Directory.GetFiles(folderPath, searchPattern);
 
             if (files.Length > 0)
@@ -104,7 +104,7 @@ namespace Bl
 
             if (image != null)
             {
-                gfx.DrawImage(image, 400, 100, image.PixelWidth / 2, image.PixelHeight / 2);
+                gfx.DrawImage(image, 350, 50, image.PixelWidth / 5, image.PixelHeight / 5);
             }
 
 
@@ -157,7 +157,7 @@ namespace Bl
                 foreach (var log in tour.TourLogs)
                 {
                     yPoint += 20;
-                    gfx.DrawString($"Date: {log.Date.ToShortDateString()} - Comment: {log.Comment} - Difficulty: {log.Difficulty} - Distance: {log.TotalDistance} km - Time: {log.TotalTime} minutes - Rating: {log.Rating}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
+                    gfx.DrawString($"Date: {log.Date.ToShortDateString()} - Comment: {log.Comment} - Difficulty: {log.Difficulty} - Distance: {log.TotalDistance} m - Time: {log.TotalTime} seconds - Rating: {log.Rating}", font, XBrushes.Black, new XRect(20, yPoint, page.Width, page.Height), XStringFormats.TopLeft);
                 }
             }
             else

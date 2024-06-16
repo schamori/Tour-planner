@@ -7,7 +7,7 @@ using System.Text;
 
 namespace DAL
 {
-    public class OpenRouteServiceClient
+    public class OpenRouteServiceClient : IOpenRouteServiceClient
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(OpenRouteServiceClient));
         private readonly HttpClient _client = new HttpClient();
@@ -67,7 +67,6 @@ namespace DAL
 
         public Bitmap GetMarkerImage(string markerFileName)
         {
-            // Erstellen Sie den absoluten Pfad zum Marker-Bild
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
             string folderPath = Path.Combine(basePath, "..\\..\\..\\..", "Bl\\resources");
             string absolutePath = Path.Combine(folderPath, markerFileName);

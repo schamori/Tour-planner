@@ -9,7 +9,7 @@ using Models;
 
 namespace Bl
 {
-    public class MapCreator
+    public class MapCreator : IMapCreator
     {
         private readonly double _minLon;
         private readonly double _minLat;
