@@ -2,6 +2,7 @@
 ## UX
 Home Screen:
 
+
 The main area displays a list of created tours. Each tour entry has options to modify or delete.
 An "Add" button is prominently placed, possibly in the top right corner or as a floating action button at the bottom.
 If no tours are present, this area displays a message indicating the list is empty, with a prompt or the "Add" button to create a new tour.
